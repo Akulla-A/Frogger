@@ -1,10 +1,10 @@
 package environment;
 
+import java.awt.Color;
+
+import util.Case;
 import gameCommons.Game;
 import graphicalElements.Element;
-import util.Case;
-
-import java.awt.*;
 
 public class Car {
 	private Game game;
@@ -15,11 +15,20 @@ public class Car {
 	private final Color colorRtL = Color.BLUE;
 
 	//TODO Constructeur(s)
-	
-	//TODO : ajout de methodes
 
-	
-	
+	//TODO : ajout de methodes
+	final int tic = 2;
+	private int tickCount = 0;
+
+	public boolean update(boolean moving){
+		if(moving){
+			// deplacer voitures
+
+			// if en dehors de la grille then return true
+		}
+		addToGraphics();
+	}
+
 	/* Fourni : addToGraphics() permettant d'ajouter un element graphique correspondant a la voiture*/
 	private void addToGraphics() {
 		for (int i = 0; i < length; i++) {
