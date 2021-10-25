@@ -31,6 +31,7 @@ public class Frog implements IFrog {
 
 	public Frog(Game game){
 		this.game = game;
+		this.pos = new Case((int)game.width/2, 0);
 	}
 
 	public Case getPosition(){
