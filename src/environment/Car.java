@@ -1,6 +1,7 @@
 package environment;
 
 import java.awt.Color;
+import java.util.Random;
 
 import util.Case;
 import gameCommons.Game;
@@ -25,10 +26,13 @@ public class Car {
 		this.game = game;
 		this.leftPosition = leftPosition;
 		this.leftToRight = leftToRight;
-		this.length = length;
+		this.length = (new Random()).nextInt(3)+1;
 	}
 
 	//TODO : ajout de methodes
+	public boolean inBounds(Case p){
+		return this.leftPosition.ord != p.ord && (this.leftPosition.absc <= p.absc || p.absc <= this.leftPosition.absc + length);
+	}
 
 	public boolean update(boolean moving){
 

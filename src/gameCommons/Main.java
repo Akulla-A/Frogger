@@ -1,13 +1,16 @@
 package gameCommons;
 
-import environment.Environment;
-import frog.Frog;
-import graphicalElements.FroggerGraphic;
-import graphicalElements.IFroggerGraphics;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
+
+import environment.Environment;
+import frog.Frog;
+import givenEnvironment.GivenEnvironment;
+import graphicalElements.FroggerGraphic;
+import graphicalElements.IFroggerGraphics;
+import gameCommons.Game;
 
 public class Main {
 
@@ -29,7 +32,7 @@ public class Main {
 		game.setFrog(frog);
 		graphic.setFrog(frog);
 		//Cr�ation et liaison de l'environnement
-		IEnvironment env = new Environment (game);
+		IEnvironment env = new Environment(game);
 		game.setEnvironment(env);
 				
 		//Boucle principale : l'environnement s'acturalise tous les tempo milisecondes

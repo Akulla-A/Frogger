@@ -15,23 +15,25 @@ public class Lane {
 	private double density;
 	private int tic = 0;
 
-	public Lane(Game game, int ord, int speed, ArrayList<Car> cars, boolean leftToRight, double density){
+	public Lane(Game game, int ord){
 		this.game = game;
 		this.ord = ord;
-		this.speed = speed;
-		this.cars = cars;
-		this.leftToRight = leftToRight;
-		this.density = density;
+
+		// aléatoire
+		Random r = new Random();
+		this.speed = r.nextInt(3) + 1;
+		this.leftToRight = r.nextBoolean();
+		this.density = r.nextDouble();
 	}
 
 	public void update() {
-		++tic;
-
-		for(Car c : cars){
-			boolean outOfBounds = c.update(speed % tic == 0);
+		for(int i = 0; i < cars.size(); i++){
+			Car c = cars.get(i);
+			boolean outOfBounds = c.update(tic % speed == 0);
 
 			if(outOfBounds){
-				cars.remove (c);
+				cars.remove(c);
+				--i;
 			}
 		}
 

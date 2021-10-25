@@ -7,12 +7,15 @@ import util.Case;
 import java.util.ArrayList;
 
 public class Environment implements IEnvironment {
-    private ArrayList<Lane> routes;
+    private ArrayList<Lane> routes = new ArrayList<>();
     private Game game;
 
     public Environment(Game game){
         this.game = game;
-        this.routes = new ArrayList<>(game.height);
+
+        for(int i = 0; i < game.height; i++){
+            this.routes.add(new Lane(game, i));
+        }
     }
     @Override
     public boolean isSafe(Case c) {
