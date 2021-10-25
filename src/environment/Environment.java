@@ -17,10 +17,8 @@ public class Environment implements IEnvironment {
     @Override
     public boolean isSafe(Case c) {
         for(Lane route : routes){
-            for(Car voiture : route.getCars()){
-                if (!voiture.isSafe(c)){
-                    return false;
-                }
+            if(!route.isSafe(c)){
+                return false;
             }
         }
 

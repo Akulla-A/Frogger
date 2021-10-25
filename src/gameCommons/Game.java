@@ -1,5 +1,6 @@
 package gameCommons;
 
+import frog.Frog;
 import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
 
@@ -18,7 +19,7 @@ public class Game {
 
 	// Lien aux objets utilis�s
 	private IEnvironment environment;
-	private IFrog frog;
+	private Frog frog;
 	private IFroggerGraphics graphic;
 
 	/**
@@ -49,7 +50,7 @@ public class Game {
 	 * @param frog
 	 */
 	public void setFrog(IFrog frog) {
-		this.frog = frog;
+		this.frog = (Frog)frog;
 	}
 
 	/**
@@ -97,6 +98,7 @@ public class Game {
 		graphic.clear();
 		environment.update();
 		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		frog.addAliveTime();
 		testLose();
 		testWin();
 	}
