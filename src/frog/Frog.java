@@ -43,6 +43,30 @@ public class Frog implements IFrog {
 	}
 
 	public void move(Direction key){
-		this.dir = key;
+		Case c;
+
+		switch(key){
+			case up:
+				c = new Case(pos.absc, pos.ord + 1);
+				break;
+			case down:
+				c = new Case(pos.absc, pos.ord - 1);
+				break;
+			case left:
+				c = new Case(pos.absc - 1, pos.ord);
+				break;
+			case right:
+				c = new Case(pos.absc + 1, pos.ord);
+				break;
+			default:
+				return;
+		}
+
+		System.out.println (c.absc + " : " + c.ord);
+
+		if(0 <= c.absc && c.absc <= game.width && 0 < c.ord && c.ord < game.height){
+			this.dir = key;
+			this.pos = c;
+		}
 	}
 }
