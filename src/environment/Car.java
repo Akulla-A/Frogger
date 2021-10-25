@@ -14,19 +14,34 @@ public class Car {
 	private final Color colorLtR = Color.BLACK;
 	private final Color colorRtL = Color.BLUE;
 
-	//TODO Constructeur(s)
+	public Car(Game game, Case leftPosition, boolean leftToRight, int length){
+		this.game = game;
+		this.leftPosition = leftPosition;
+		this.leftToRight = leftToRight;
+		this.length = length;
+	}
+
+	public Car(Game game, Case leftPosition, boolean leftToRight){
+		this.game = game;
+		this.leftPosition = leftPosition;
+		this.leftToRight = leftToRight;
+		this.length = length;
+	}
 
 	//TODO : ajout de methodes
-	final int tic = 2;
-	private int tickCount = 0;
 
 	public boolean update(boolean moving){
-		if(moving){
-			// deplacer voitures
 
-			// if en dehors de la grille then return true
+		if(moving){
+			this.leftPosition = new Case(this.leftPosition.absc + 1, this.leftPosition.ord);
+
+			if(this.leftPosition.absc >= game.width || this.leftPosition.absc < -length){
+				return true;
+			}
 		}
+
 		addToGraphics();
+		return false;
 	}
 
 	/* Fourni : addToGraphics() permettant d'ajouter un element graphique correspondant a la voiture*/
