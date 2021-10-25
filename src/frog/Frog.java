@@ -26,4 +26,8 @@ public class Frog {
 	public int getAliveTime(){
 		return aliveTicks;
 	}
+
+	public Frog(Game game){
+		this.game = game;
+	}
 }
