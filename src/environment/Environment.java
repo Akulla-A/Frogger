@@ -17,6 +17,7 @@ public class Environment implements IEnvironment {
             this.routes.add(new Lane(game, i));
         }
     }
+
     @Override
     public boolean isSafe(Case c) {
         for(Lane route : routes){
@@ -25,12 +26,12 @@ public class Environment implements IEnvironment {
             }
         }
 
-        return 0 > c.absc || c.absc > game.width || 0 >= c.ord || c.ord >= game.height;
+        return !(0 > c.absc || 0 > c.ord || c.absc >= game.width || c.ord >= game.height);
     }
 
     @Override
     public boolean isWinningPosition(Case c) {
-        return c.ord == game.height-1;
+        return c.ord == game.height - 1;
     }
 
     @Override

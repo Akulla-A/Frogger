@@ -31,13 +31,13 @@ public class Car {
 
 	//TODO : ajout de methodes
 	public boolean inBounds(Case p){
-		return this.leftPosition.ord != p.ord && (this.leftPosition.absc <= p.absc || p.absc <= this.leftPosition.absc + length);
+		int absc = this.leftPosition.absc;
+		return ((this.leftPosition.ord == p.ord) && (absc <= p.absc && p.absc <= absc + length));
 	}
 
 	public boolean update(boolean moving){
-
 		if(moving){
-			this.leftPosition = new Case(this.leftPosition.absc + 1, this.leftPosition.ord);
+			this.leftPosition = new Case(this.leftPosition.absc + (leftToRight ? 1 : -1), this.leftPosition.ord);
 
 			if(this.leftPosition.absc >= game.width || this.leftPosition.absc < -length){
 				return true;

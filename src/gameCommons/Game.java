@@ -1,7 +1,9 @@
 package gameCommons;
 
+import environment.Environment;
 import frog.Frog;
 import graphicalElements.Element;
+import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
 
 import java.awt.*;
@@ -77,7 +79,12 @@ public class Game {
 	 * @return true si le partie est perdue
 	 */
 	public boolean testLose() {
-		return !this.environment.isSafe(this.frog.getPosition());
+		if(frog.isAlive() && !this.environment.isSafe(frog.getPosition())){
+			frog.setAlive(false);
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -87,7 +94,12 @@ public class Game {
 	 * @return true si la partie est gagn�e
 	 */
 	public boolean testWin() {
-		return (this.environment.isWinningPosition (this.frog.getPosition()));
+		if(frog.isAlive() && this.environment.isWinningPosition (this.frog.getPosition())){
+			frog.setAlive(false);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -99,8 +111,11 @@ public class Game {
 		environment.update();
 		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
 		frog.addAliveTime();
-		testLose();
-		testWin();
-	}
 
+		if(testWin()){
+			this.graphic.endGameScreen("Vous avez gagné : " + frog.getAliveTime()/10 + " sec");
+		} else if(testLose()){
+			this.graphic.endGameScreen("Vous avez perdu : " + frog.getAliveTime()/10 + " sec");
+		}
+	}
 }

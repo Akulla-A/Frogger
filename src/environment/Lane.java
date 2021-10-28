@@ -23,15 +23,14 @@ public class Lane {
 		Random r = new Random();
 		this.speed = r.nextInt(3) + 1;
 		this.leftToRight = r.nextBoolean();
-		this.density = r.nextDouble();
+		this.density = r.nextDouble()%0.01+0.025;
 	}
 
 	public void update() {
 		for(int i = 0; i < cars.size(); i++){
 			Car c = cars.get(i);
-			boolean outOfBounds = c.update(tic % speed == 0);
 
-			if(outOfBounds){
+			if(c.update(tic % speed == 0)){
 				cars.remove(c);
 				--i;
 			}
@@ -65,7 +64,9 @@ public class Lane {
 	 */
 	private void mayAddCar() {
 		if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
-			if (game.randomGen.nextDouble() < density) {
+			double rnd = game.randomGen.nextDouble();
+
+			if (rnd < density) {
 				cars.add(new Car(game, getBeforeFirstCase(), leftToRight));
 			}
 		}
