@@ -1,6 +1,7 @@
 package gameCommons;
 
 import environment.EnvInf;
+import environment.Environment;
 import frog.Frog;
 import frog.FrogInf;
 import graphicalElements.Element;
@@ -22,6 +23,7 @@ public class GameInf {
     private IEnvironment environment;
     private FrogInf frog;
     private IFroggerGraphics graphic;
+    private int score = 0;
 
     /**
      * @param graphic             l'interface graphique
@@ -102,8 +104,22 @@ public class GameInf {
         frog.addAliveTime();
 
         if (testLose()) {
-            int res = frog.getPosition().ord - 1;
-            this.graphic.endGameScreen("Vous avez perdu avec un score de : " + res);
+            this.graphic.endGameScreen("Vous avez perdu avec un score de : " + score);
         }
+    }
+
+    /**
+     * Récupérer l'environnement, utilisé pour bouger la grenouille et relier cela pour les lanes
+     */
+
+    public IEnvironment getEnvironment(){
+        return this.environment;
+    }
+
+    public void addScore(){
+        ++score;
+    }
+    public void subScore(){
+        --score;
     }
 }

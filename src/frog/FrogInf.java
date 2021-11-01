@@ -47,15 +47,16 @@ public class FrogInf implements IFrog {
         if(!isAlive())
             return;
 
-        Case c;
+        Case c = pos;
 
         switch(key){
             case up:
-                c = new Case(pos.absc, pos.ord + 1);
-
+                game.getEnvironment().addLane();
+                game.addScore();
                 break;
             case down:
-                c = new Case(pos.absc, pos.ord - 1);
+                game.getEnvironment().backLane();
+                game.subScore();
                 break;
             case left:
                 c = new Case(pos.absc - 1, pos.ord);

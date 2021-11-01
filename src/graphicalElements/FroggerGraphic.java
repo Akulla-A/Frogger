@@ -84,7 +84,5 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		label.setSize(this.getSize());
 		frame.getContentPane().add(label);
 		frame.repaint();
-
 	}
-
 }

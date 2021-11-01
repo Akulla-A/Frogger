@@ -30,6 +30,10 @@ public class CarInf {
         this.length = (new Random()).nextInt(3)+1;
     }
 
+    public void newOrd(int ord){
+        leftPosition = new Case(leftPosition.absc, ord);
+    }
+
     //TODO : ajout de methodes
     public boolean inBounds(Case p){
         int absc = this.leftPosition.absc;
@@ -46,6 +50,18 @@ public class CarInf {
         }
 
         addToGraphics();
+        return false;
+    }
+
+    public boolean updateOutside(boolean moving){
+        if(moving){
+            this.leftPosition = new Case(this.leftPosition.absc + (leftToRight ? 1 : -1), this.leftPosition.ord);
+
+            if(this.leftPosition.absc >= game.width || this.leftPosition.absc < -length){
+                return true;
+            }
+        }
+
         return false;
     }
 

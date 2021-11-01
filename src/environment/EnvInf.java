@@ -11,19 +11,70 @@ import java.util.ArrayList;
 public class EnvInf implements IEnvironment {
     private ArrayList<LaneInf> routes = new ArrayList<>();
     private GameInf game;
+    private int height;
+    private ArrayList<LaneInf> backRoutes = new ArrayList<>();
 
     public EnvInf(GameInf game){
         this.game = game;
+        height = game.height;
+
+        for(int i = 0; i < 2; i++){
+            this.routes.add(new LaneInf(game, i, 0));
+        }
 
         for(int i = 2; i <= game.height; i++){
             this.routes.add(new LaneInf(game, i));
         }
     }
-    private int height = game.height;
+
     @Override
     public void addLane(){
-        height++;
-        routes.add(new LaneInf (game, height));
+        ArrayList<LaneInf> newRoutes = new ArrayList<>();
+
+        for(int i = 0; i < routes.size(); i++){
+            LaneInf r = routes.get(i);
+
+            if(r.getOrd() == 0){
+                backRoutes.add(r);
+                continue;
+            }
+
+            LaneInf newLane = new LaneInf(r, r.getOrd()-1);
+            newRoutes.add(newLane);
+        }
+
+        LaneInf topLane = new LaneInf (game, game.height);
+        newRoutes.add(topLane);
+
+        routes = newRoutes;
+    }
+
+    public void backLane(){
+        if(backRoutes.size() < 1)
+            return;
+
+        for(int i = 0; i < routes.size(); i++){
+            if(i < game.height){
+                routes.get(i).addOrd(1);
+            } else {
+                routes.remove(i);
+                i = i - 1;
+            }
+        }
+
+        LaneInf last = new LaneInf(backRoutes.get(backRoutes.size()-1), 0);
+        backRoutes.remove(backRoutes.size()-1);
+        routes.add(0, last);
+
+        System.out.println("Check 1 ==========");
+        for(LaneInf r : routes){
+            System.out.println(r);
+        }
+
+        System.out.println("Check 2 =========");
+        for(LaneInf r : backRoutes){
+            System.out.println(r);
+        }
     }
 
     @Override
@@ -46,11 +97,12 @@ public class EnvInf implements IEnvironment {
 
     @Override
     public void update() {
-        if(game.getFrog().getDirection() == Direction.up){
-            addLane();
-        }
         for(LaneInf route : routes) {
             route.update();
+        }
+
+        for(LaneInf route : backRoutes) {
+            route.updateOutside();
         }
 
        /* if(game.getFrog().getDirection() == Direction.up) {

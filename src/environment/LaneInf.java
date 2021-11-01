@@ -17,6 +17,11 @@ public class LaneInf {
     private double density;
     private int tic = 0;
 
+    public LaneInf(GameInf game, int ord, int speed){
+        this(game, ord);
+        this.speed = speed;
+    }
+
     public LaneInf(GameInf game, int ord){
         this.game = game;
         this.ord = ord;
@@ -27,14 +32,36 @@ public class LaneInf {
         this.leftToRight = r.nextBoolean();
         this.density = r.nextDouble()%0.01+0.05;
     }
+
+    public LaneInf(LaneInf l, int newOrd){
+        this.game = l.game;
+        this.ord = newOrd;
+        this.speed = l.speed;
+        this.cars = l.cars;
+        this.leftToRight = l.leftToRight;
+        this.density = l.density;
+        this.tic = l.tic;
+
+        // Modifier ord des voitures
+        for (CarInf car : cars){
+            car.newOrd(newOrd);
+        }
+    }
+
     //ajoute un entier i en paramètre à l'attribut ord
     public void addOrd(int i){
         this.ord += i;
+        for (CarInf car : cars){
+            car.newOrd(this.ord);
+        }
     }
 
     //soustrait un entier i en paramètre à l'attribut ord
     public void subOrd(int i){
         this.ord -= i;
+        for (CarInf car : cars){
+            car.newOrd(this.ord);
+        }
     }
 
 
@@ -43,25 +70,32 @@ public class LaneInf {
     }
 
     public void update() {
-        /*if(ord == game.getFrog().getPosition().ord -1 && game.getFrog().getDirection() == Direction.up){
-            for(int j = 0; j < cars.size(); j++){
-                if(ord == game.getFrog().getPosition().ord -1 && game.getFrog().getDirection() == Direction.up){
-                    ord--;
-                }else{
-                     if(){}
-                } */
-            for(int i = 0; i < cars.size(); i++){
-                CarInf c = cars.get(i);
-                if(c.update(tic % speed == 0)) {
-                    cars.remove(c);
-                    --i;
-                }
+        if(this.speed == 0)
+            return;
+
+        for(int i = 0; i < cars.size(); i++){
+            CarInf c = cars.get(i);
+            if(c.update(tic % speed == 0)) {
+                cars.remove(c);
+                --i;
             }
+        }
+
         mayAddCar();
         /*if (game.getFrog().getDirection() == Direction.up) {
 
             this.ord += 1;
         }*/
+    }
+
+    public void updateOutside(){
+        for(int i = 0; i < cars.size(); i++){
+            CarInf c = cars.get(i);
+            if(c.updateOutside(tic % speed == 0)) {
+                cars.remove(c);
+                --i;
+            }
+        }
     }
 
     // TODO : ajout de methodes
@@ -109,5 +143,9 @@ public class LaneInf {
             return new Case(-1, ord);
 
         return new Case(game.width, ord);
+    }
+
+    public String toString(){
+        return "Ord : " + ord + ". Speed : " + speed + ". l2r : + " + leftToRight;
     }
 }
