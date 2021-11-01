@@ -46,6 +46,10 @@ public class Game {
 		this.defaultDensity = defaultDensity;
 	}
 
+	public Frog getFrog(){
+		return this.frog;
+	}
+
 	/**
 	 * Lie l'objet frog � la partie
 	 * 
@@ -83,7 +87,6 @@ public class Game {
 			frog.setAlive(false);
 			return true;
 		}
-
 		return false;
 	}
 
@@ -111,7 +114,6 @@ public class Game {
 		environment.update();
 		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
 		frog.addAliveTime();
-
 		if(testWin()){
 			this.graphic.endGameScreen("Vous avez gagné : " + frog.getAliveTime()/10 + " sec");
 		} else if(testLose()){

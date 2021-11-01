@@ -17,6 +17,12 @@ public class Environment implements IEnvironment {
             this.routes.add(new Lane(game, i));
         }
     }
+    private int derOrd = game.height;
+    @Override
+    public void addLane(){
+        derOrd++;
+        this.routes.add(new Lane(game, derOrd));
+    }
 
     @Override
     public boolean isSafe(Case c) {
