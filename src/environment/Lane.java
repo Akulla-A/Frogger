@@ -1,10 +1,10 @@
 package environment;
 
+import gameCommons.Game;
+import util.Case;
+
 import java.util.ArrayList;
 import java.util.Random;
-
-import util.Case;
-import gameCommons.Game;
 
 public class Lane {
 	private Game game;
@@ -72,14 +72,14 @@ public class Lane {
 		}
 	}
 
-	private Case getFirstCase() {
+	protected Case getFirstCase() {
 		if (leftToRight)
 			return new Case(0, ord);
 
 		return new Case(game.width - 1, ord);
 	}
 
-	private Case getBeforeFirstCase() {
+	protected Case getBeforeFirstCase() {
 		if (leftToRight)
 			return new Case(-1, ord);
 

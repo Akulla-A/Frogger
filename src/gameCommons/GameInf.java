@@ -1,16 +1,13 @@
 package gameCommons;
 
-import environment.EnvInf;
-import environment.Environment;
 import frog.Frog;
-import frog.FrogInf;
 import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
 
 import java.awt.*;
 import java.util.Random;
 
-public class GameInf {
+public class GameInf extends Game{
     public final Random randomGen = new Random();
 
     // Caracteristique de la partie
@@ -21,9 +18,9 @@ public class GameInf {
 
     // Lien aux objets utilis�s
     private IEnvironment environment;
-    private FrogInf frog;
+    private Frog frog;
     private IFroggerGraphics graphic;
-    private int score = 0;
+    private float startTime;
 
     /**
      * @param graphic             l'interface graphique
@@ -33,7 +30,7 @@ public class GameInf {
      * @param defaultDensity      densite de voiture utilisee par defaut pour les routes
      */
     public GameInf(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity) {
-        super();
+        super(graphic, width, height, minSpeedInTimerLoop, defaultDensity);
         this.graphic = graphic;
         this.width = width;
         this.height = height;
@@ -41,70 +38,14 @@ public class GameInf {
         this.defaultDensity = defaultDensity;
     }
 
-
-
-    public FrogInf getFrog() {
-        return this.frog;
-    }
-
-    /**
-     * Lie l'objet frog � la partie
-     *
-     * @param frog
-     */
-    public void setFrog(IFrog frog) {
-        this.frog = (FrogInf) frog;
-    }
-
-    /**
-     * Lie l'objet environment a la partie
-     *
-     * @param environment
-     */
-    public void setEnvironment(IEnvironment environment) {
-        this.environment = environment;
-    }
-
-    /**
-     * @return l'interface graphique
-     */
-    public IFroggerGraphics getGraphic() {
-        return graphic;
-    }
-
-    /**
-     * Teste si la partie est perdue et lance un �cran de fin appropri� si tel
-     * est le cas
-     *
-     * @return true si le partie est perdue
-     */
-    public boolean testLose() {
-        if (frog.isAlive() && !this.environment.isSafe(frog.getPosition())) {
-            frog.setAlive(false);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Teste si la partie est gagnee et lance un �cran de fin appropri� si tel
-     * est le cas
-     *
-     * @return true si la partie est gagn�e
-     */
-
-    /**
-     * Actualise l'environnement, affiche la grenouille et verifie la fin de
-     * partie.
-     */
+    @Override
     public void update() {
         graphic.clear();
         environment.update();
-        this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
-        frog.addAliveTime();
+        this.graphic.add(new Element (frog.getPosition(), Color.GREEN));
 
-        if (testLose()) {
-            this.graphic.endGameScreen("Vous avez perdu avec un score de : " + score);
+        if(testLose()){
+            this.graphic.endGameScreen("Vous avez traversé : " + frog.getAliveTime() + " routes");
         }
     }
 
@@ -114,12 +55,5 @@ public class GameInf {
 
     public IEnvironment getEnvironment(){
         return this.environment;
-    }
-
-    public void addScore(){
-        ++score;
-    }
-    public void subScore(){
-        --score;
     }
 }

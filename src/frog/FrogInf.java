@@ -1,48 +1,24 @@
 package frog;
 
-import environment.LaneInf;
 import gameCommons.Game;
 import gameCommons.GameInf;
-import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
 
-public class FrogInf implements IFrog {
+public class FrogInf extends Frog {
     private GameInf game;
     private boolean alive = true;
     private int aliveTicks = 0;
     private Case pos;
     private Direction dir;
 
-    public void setAlive(boolean state){
-        alive = state;
-    }
-
-    public boolean isAlive(){
-        return alive;
-    }
-
-    public void addAliveTime(){
-        ++aliveTicks;
-    }
-
-    public int getAliveTime(){
-        return aliveTicks;
-    }
-
     public FrogInf(GameInf game){
+        super((Game)game);
         this.game = game;
         this.pos = new Case((int)game.width/2, 1);
     }
 
-    public Case getPosition(){
-        return pos;
-    }
-
-    public Direction getDirection(){
-        return dir;
-    }
-
+    @Override
     public void move(Direction key){
         if(!isAlive())
             return;
@@ -52,11 +28,11 @@ public class FrogInf implements IFrog {
         switch(key){
             case up:
                 game.getEnvironment().addLane();
-                game.addScore();
+                aliveTicks++;
                 break;
             case down:
                 game.getEnvironment().backLane();
-                game.subScore();
+                aliveTicks--;
                 break;
             case left:
                 c = new Case(pos.absc - 1, pos.ord);

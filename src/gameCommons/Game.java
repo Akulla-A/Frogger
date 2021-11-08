@@ -1,9 +1,7 @@
 package gameCommons;
 
-import environment.Environment;
 import frog.Frog;
 import graphicalElements.Element;
-import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
 
 import java.awt.*;
@@ -23,6 +21,7 @@ public class Game {
 	private IEnvironment environment;
 	private Frog frog;
 	private IFroggerGraphics graphic;
+	private float startTime;
 
 	/**
 	 * 
@@ -44,6 +43,7 @@ public class Game {
 		this.height = height;
 		this.minSpeedInTimerLoops = minSpeedInTimerLoop;
 		this.defaultDensity = defaultDensity;
+		this.startTime = System.currentTimeMillis();
 	}
 
 	public Frog getFrog(){
@@ -113,11 +113,11 @@ public class Game {
 		graphic.clear();
 		environment.update();
 		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
-		frog.addAliveTime();
+
 		if(testWin()){
-			this.graphic.endGameScreen("Vous avez gagné : " + frog.getAliveTime()/10 + " sec");
+			this.graphic.endGameScreen("Vous avez gagné : " + (System.currentTimeMillis()-this.startTime)*1000 + " sec");
 		} else if(testLose()){
-			this.graphic.endGameScreen("Vous avez perdu : " + frog.getAliveTime()/10 + " sec");
+			this.graphic.endGameScreen("Vous avez survécu : " + (System.currentTimeMillis()-this.startTime)*1000 + " sec");
 		}
 	}
 }
