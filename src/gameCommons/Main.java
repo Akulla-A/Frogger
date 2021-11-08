@@ -1,18 +1,41 @@
 package gameCommons;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
-
 import environment.Environment;
+import environment.ICaseSpecial;
 import frog.Frog;
-import givenEnvironment.GivenEnvironment;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
-import gameCommons.Game;
+import specialCase.Bonus;
+import specialCase.Ice;
+import specialCase.Trap;
+import specialCase.Tunnel;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class Main {
+	public static ICaseSpecial getSpecialCase(int abs, int ord){
+		Random r = new Random ();
+
+		if(r.nextFloat () < 0.5){
+			return null;
+		} else {
+			switch(r.nextInt(4)){
+				case 1:
+					return new Bonus(abs, ord);
+				case 2:
+					return new Ice (abs, ord);
+				case 3:
+					return new Trap (abs, ord);
+				case 4:
+					return new Tunnel (abs, ord);
+				default:
+					return null;
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 

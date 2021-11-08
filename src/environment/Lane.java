@@ -1,6 +1,7 @@
 package environment;
 
 import gameCommons.Game;
+import gameCommons.Main;
 import util.Case;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Lane {
 	private boolean leftToRight;
 	private double density;
 	private int tic = 0;
+	private ArrayList<ICaseSpecial> specialCases = new ArrayList<>();
 
 	public Lane(Game game, int ord){
 		this.game = game;
@@ -24,6 +26,14 @@ public class Lane {
 		this.speed = r.nextInt(3) + 1;
 		this.leftToRight = r.nextBoolean();
 		this.density = r.nextDouble()%0.01+0.025;
+
+		for(int i = 0; i < game.width; i++){
+			ICaseSpecial c = Main.getSpecialCase(i, ord);
+
+			if(c != null){
+				specialCases.add(c);
+			}
+		}
 	}
 
 	public void update() {
