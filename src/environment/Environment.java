@@ -49,4 +49,14 @@ public class Environment implements IEnvironment {
     public void backLane(){
 
     }
+
+    public ICaseSpecial getSpecialFrogCase(Case frogCase){
+        for(Lane l : routes){
+            if(l.getOrd() == frogCase.ord){
+                return l.getSpecialCases(frogCase);
+            }
+        }
+
+        return null;
+    }
 }

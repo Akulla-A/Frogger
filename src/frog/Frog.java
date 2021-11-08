@@ -1,17 +1,18 @@
 package frog;
 
+import environment.ICaseSpecial;
 import gameCommons.Game;
 import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
 
 public class Frog implements IFrog {
-	
-	private Game game;
-	private boolean alive = true;
-	private int aliveTicks = 0;
-	private Case pos;
-	private Direction dir;
+
+	protected Game game;
+	protected boolean alive = true;
+	protected int aliveTicks = 0;
+	protected Case pos;
+	protected Direction dir;
 
 	public void setAlive(boolean state){
 		alive = state;
@@ -68,6 +69,12 @@ public class Frog implements IFrog {
 		if(0 <= c.absc && c.absc < game.width && 0 <= c.ord && c.ord < game.height){
 			this.dir = key;
 			this.pos = c;
+
+			ICaseSpecial specCase = game.getEnvironment().getSpecialFrogCase(pos);
+
+			if(specCase != null){
+				specCase.onFrogMove(this);
+			}
 		}
 	}
 }

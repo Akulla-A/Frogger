@@ -8,7 +8,6 @@ import java.awt.*;
 import java.util.Random;
 
 public class Game {
-
 	public final Random randomGen = new Random();
 
 	// Caracteristique de la partie
@@ -18,10 +17,10 @@ public class Game {
 	public final double defaultDensity;
 
 	// Lien aux objets utilis�s
-	private IEnvironment environment;
-	private Frog frog;
-	private IFroggerGraphics graphic;
-	private float startTime;
+	protected IEnvironment environment;
+	protected Frog frog;
+	protected IFroggerGraphics graphic;
+	protected float startTime;
 
 	/**
 	 * 
@@ -119,5 +118,9 @@ public class Game {
 		} else if(testLose()){
 			this.graphic.endGameScreen("Vous avez survécu : " + (System.currentTimeMillis()-this.startTime)*1000 + " sec");
 		}
+	}
+
+	public IEnvironment getEnvironment(){
+		return this.environment;
 	}
 }

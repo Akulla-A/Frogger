@@ -1,5 +1,6 @@
 package gameCommons;
 
+import environment.ICaseSpecial;
 import util.Case;
 
 public interface IEnvironment {
@@ -7,7 +8,7 @@ public interface IEnvironment {
 	/**
 	 * Teste si une case est sure, c'est � dire que la grenouille peut s'y poser
 	 * sans mourir
-	 * 
+	 *
 	 * @param c
 	 *            la case � tester
 	 * @return vrai s'il n'y a pas danger
@@ -16,7 +17,7 @@ public interface IEnvironment {
 
 	/**
 	 * Teste si la case est une case d'arrivee
-	 * 
+	 *
 	 * @param c
 	 * @return vrai si la case est une case de victoire
 	 */
@@ -30,4 +31,6 @@ public interface IEnvironment {
 	public void addLane();
 
 	public void backLane();
+
+	public ICaseSpecial getSpecialFrogCase(Case frogPose);
 }

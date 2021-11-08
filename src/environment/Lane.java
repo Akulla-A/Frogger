@@ -2,8 +2,10 @@ package environment;
 
 import gameCommons.Game;
 import gameCommons.Main;
+import graphicalElements.Element;
 import util.Case;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -37,6 +39,10 @@ public class Lane {
 	}
 
 	public void update() {
+		for (ICaseSpecial c : specialCases){
+			this.game.getGraphic().add((Element)c);
+		}
+
 		for(int i = 0; i < cars.size(); i++){
 			Car c = cars.get(i);
 
@@ -94,5 +100,24 @@ public class Lane {
 			return new Case(-1, ord);
 
 		return new Case(game.width, ord);
+	}
+
+	public ICaseSpecial getSpecialCases(Case frogCase){
+		for(ICaseSpecial spec : specialCases){
+			if(spec.getPosition().absc == frogCase.absc){
+
+				if(spec.deleteOnUse()){
+					specialCases.remove(spec);
+				}
+
+				return spec;
+			}
+		}
+
+		return null;
+	}
+
+	public int getOrd(){
+		return ord;
 	}
 }

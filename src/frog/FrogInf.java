@@ -1,5 +1,7 @@
 package frog;
 
+import environment.LaneInf;
+import gameCommons.Game;
 import gameCommons.GameInf;
 import gameCommons.IFrog;
 import util.Case;
@@ -50,11 +52,11 @@ public class FrogInf implements IFrog {
         switch(key){
             case up:
                 game.getEnvironment().addLane();
-                //game.addScore();
+                game.addScore();
                 break;
             case down:
                 game.getEnvironment().backLane();
-                //game.subScore();
+                game.subScore();
                 break;
             case left:
                 c = new Case(pos.absc - 1, pos.ord);

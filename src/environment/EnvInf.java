@@ -31,15 +31,13 @@ public class EnvInf implements IEnvironment {
     public void addLane(){
         ArrayList<LaneInf> newRoutes = new ArrayList<>();
 
-        for(int i = 0; i < routes.size(); i++){
-            LaneInf r = routes.get(i);
-
-            if(r.getOrd() == 0){
+        for (LaneInf r : routes) {
+            if (r.getOrd() == 0) {
                 backRoutes.add(r);
                 continue;
             }
 
-            LaneInf newLane = new LaneInf(r, r.getOrd()-1);
+            LaneInf newLane = new LaneInf(r , r.getOrd() - 1);
             newRoutes.add(newLane);
         }
 
@@ -104,40 +102,24 @@ public class EnvInf implements IEnvironment {
         for(LaneInf route : backRoutes) {
             route.updateOutside();
         }
+    }
 
-       /* if(game.getFrog().getDirection() == Direction.up) {
-            int index = game.getFrog().getPosition().ord -1;
-            routes.remove(index);
-            routes.add(new LaneInf(game, routes.size()));
-        }else{
-            if(game.getFrog().getDirection() == Direction.down && game.getFrog().getPosition().ord >= 0 ){
-                routes.remove(routes.size()-1);
-                int index2 = game.getFrog().getPosition().ord -1;
-                routes.add(new LaneInf(game, index2));
+    @Override
+    public ICaseSpecial getSpecialFrogCase(Case frogCase){
+        /*
+        for(Lane l : routes){
+            if(l.getOrd() == frogCase.ord){
+                for(ICaseSpecial spec : l.getSpeciaLCases()){
+                    if(spec.getPosition().absc == frogCase.absc){
+                        return spec;
+                    }
+                }
             }
         }
+        */
 
-
-
-                for(LaneInf route : routes) {
-                    route.update();
-                    if(route.getOrd() >= 0 && route.getOrd() <= game.height-5) {
-
-
-                        route.addOrd(1);
-
-                    }
-
-                //routes.add(new LaneInf(game, ));
-             } else {
-                if (game.getFrog().getDirection() == Direction.down ) {
-                    routes.get(i).subOrd(1);
-
-                }
-
-            }*/
-        }
+        return null;
+    }
 
 
 }
-

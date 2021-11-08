@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class Tunnel extends Element implements ICaseSpecial {
     public Tunnel(int abs, int ord){
-        super(abs, ord, Color.gray);
+        super(abs, ord, Color.BLACK);
     }
 
     @Override
@@ -37,4 +37,17 @@ public class Tunnel extends Element implements ICaseSpecial {
 
         frog.move(c);
     }
+
+    @Override
+    public Color getCaseColor() {
+        return this.color;
+    }
+
+    @Override
+    public Case getPosition(){
+        return new Case(this.absc, this.ord);
+    }
+
+    @Override
+    public boolean deleteOnUse() { return false; };
 }

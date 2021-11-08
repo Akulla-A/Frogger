@@ -19,17 +19,17 @@ public class Main {
 	public static ICaseSpecial getSpecialCase(int abs, int ord){
 		Random r = new Random ();
 
-		if(r.nextFloat () < 0.5){
+		if(r.nextFloat () < 0.8){
 			return null;
 		} else {
 			switch(r.nextInt(4)){
-				case 1:
+				case 0:
 					return new Bonus(abs, ord);
-				case 2:
+				case 1:
 					return new Ice (abs, ord);
-				case 3:
+				case 2:
 					return new Trap (abs, ord);
-				case 4:
+				case 3:
 					return new Tunnel (abs, ord);
 				default:
 					return null;
