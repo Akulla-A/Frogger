@@ -3,9 +3,11 @@ package environment;
 import java.awt.Color;
 import java.util.Random;
 
+import frog.Frog;
 import util.Case;
 import gameCommons.Game;
 import graphicalElements.Element;
+import util.Direction;
 
 public class Car {
 	private Game game;
@@ -14,6 +16,14 @@ public class Car {
 	private int length;
 	private final Color colorLtR = Color.BLACK;
 	private final Color colorRtL = Color.BLUE;
+	private boolean rondin;
+
+	public Case getCarPosition(){
+		int ord = this.leftPosition.ord-1;
+		int absc = this.leftPosition.ord;
+		Case position = new Case(absc, ord);
+		return position;
+	}
 
 	public Car(Game game, Case leftPosition, boolean leftToRight, int length){
 		this.game = game;
@@ -21,6 +31,7 @@ public class Car {
 		this.leftToRight = leftToRight;
 		this.length = length;
 	}
+
 
 	public Car(Game game, Case leftPosition, boolean leftToRight){
 		this.game = game;
@@ -59,5 +70,13 @@ public class Car {
 					.add(new Element(leftPosition.absc + i, leftPosition.ord, color));
 		}
 	}
+
+	public void isRondin(boolean rondin){
+		int absc = this.game.getFrog().getPosition().ord + 1;
+		if(this.rondin == true & this.game.getFrog().getPosition() == this.getCarPosition()){
+			this.game.getFrog().move(Direction.left);
+		}
+	}
+
 
 }
