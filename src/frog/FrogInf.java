@@ -7,14 +7,20 @@ import gameCommons.GameInf;
 import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
+import util.Sprite;
+import util.SpriteLoader;
 
-public class FrogInf implements IFrog {
+import java.awt.image.BufferedImage;
+
+public class FrogInf implements IFrog, Sprite {
     private GameInf game;
     private boolean alive = true;
     private int aliveTicks = 0;
     private Case pos;
     private Direction dir;
     private boolean gonnaDie = false;
+
+    public static final BufferedImage sprite = SpriteLoader.getPicture("frog_bottom.png");
 
     public void setAlive(boolean state){
         alive = state;
@@ -35,6 +41,11 @@ public class FrogInf implements IFrog {
     public FrogInf(GameInf game){
         this.game = game;
         this.pos = new Case(game.width/2, 1);
+    }
+
+    @Override
+    public BufferedImage getSprite() {
+        return sprite;
     }
 
     public Case getPosition(){

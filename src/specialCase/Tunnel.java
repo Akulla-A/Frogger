@@ -6,10 +6,13 @@ import gameCommons.IFrog;
 import graphicalElements.Element;
 import util.Case;
 import util.Direction;
+import util.SpriteLoader;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Tunnel extends Element implements ICaseSpecial {
+    public static final BufferedImage sprite = SpriteLoader.getPicture("trap.png");
     public Tunnel(int abs, int ord){
         super(abs, ord, Color.BLACK);
     }
@@ -55,5 +58,10 @@ public class Tunnel extends Element implements ICaseSpecial {
     @Override
     public Tunnel recreate(int absc, int ord){
         return new Tunnel(absc, ord);
+    }
+
+    @Override
+    public BufferedImage getSprite() {
+        return sprite;
     }
 }

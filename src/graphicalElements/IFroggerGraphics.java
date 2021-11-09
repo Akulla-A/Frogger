@@ -1,17 +1,22 @@
 package graphicalElements;
 
+import environment.ICaseSpecial;
+import frog.Frog;
 import gameCommons.IFrog;
+import util.Sprite;
+
+import java.awt.*;
 
 public interface IFroggerGraphics {
 	
 	/**
-	 * Ajoute l'élément aux éléments à afficher
+	 * Ajoute l'ï¿½lï¿½ment aux ï¿½lï¿½ments ï¿½ afficher
 	 * @param e
 	 */
     public void add(Element e);
     
     /**
-     * Enlève tous les éléments actuellement affichés
+     * Enlï¿½ve tous les ï¿½lï¿½ments actuellement affichï¿½s
      */
     public void clear();
     
@@ -21,14 +26,20 @@ public interface IFroggerGraphics {
     public void repaint();
     
     /**
-     * Lie la grenouille à l'environneemnt graphique
+     * Lie la grenouille ï¿½ l'environneemnt graphique
      * @param frog
      */
     public void setFrog(IFrog frog);
     
     /**
-     * Lance un écran de fin de partie
-     * @param message le texte à afficher
+     * Lance un ï¿½cran de fin de partie
+     * @param message le texte ï¿½ afficher
      */
     public void endGameScreen(String message);
+
+    // ajoutÃ©s nous-mÃªmes
+    public Graphics getGraphics();
+    public void add(Sprite e, int index);
+    public void clearSprite();
+    public void remove(Sprite e, int index);
 }

@@ -63,16 +63,6 @@ public class EnvInf implements IEnvironment {
         LaneInf last = new LaneInf(backRoutes.get(backRoutes.size()-1), 0);
         backRoutes.remove(backRoutes.size()-1);
         routes.add(0, last);
-
-        System.out.println("Check 1 ==========");
-        for(LaneInf r : routes){
-            System.out.println(r);
-        }
-
-        System.out.println("Check 2 =========");
-        for(LaneInf r : backRoutes){
-            System.out.println(r);
-        }
     }
 
     @Override
@@ -90,8 +80,6 @@ public class EnvInf implements IEnvironment {
     public boolean isWinningPosition(Case c) {
         return false;
     }
-
-
 
     @Override
     public void update() {

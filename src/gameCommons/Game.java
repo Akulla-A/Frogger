@@ -3,8 +3,10 @@ package gameCommons;
 import frog.Frog;
 import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
+import util.SpriteLoader;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Game {
@@ -111,7 +113,9 @@ public class Game {
 	public void update() {
 		graphic.clear();
 		environment.update();
-		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+
+		//this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		this.graphic.add(frog, 4);
 
 		if(testWin()){
 			this.graphic.endGameScreen("Vous avez gagné : " + (System.currentTimeMillis()-this.startTime)/1000 + " sec");

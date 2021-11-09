@@ -5,10 +5,13 @@ import frog.Frog;
 import gameCommons.IFrog;
 import graphicalElements.Element;
 import util.Case;
+import util.SpriteLoader;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Trap extends Element implements ICaseSpecial {
+    public static final BufferedImage sprite = SpriteLoader.getPicture("trap.png");
     public Trap(int abs, int ord){
         super(abs, ord, Color.RED);
     }
@@ -34,5 +37,10 @@ public class Trap extends Element implements ICaseSpecial {
     @Override
     public Trap recreate(int absc, int ord){
         return new Trap(absc, ord);
+    }
+
+    @Override
+    public BufferedImage getSprite() {
+        return sprite;
     }
 }

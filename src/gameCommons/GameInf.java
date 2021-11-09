@@ -94,7 +94,9 @@ public class GameInf {
     public void update() {
         graphic.clear();
         environment.update();
-        this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+
+        this.graphic.add(frog, 4);
+
         frog.addAliveTime();
 
         if (testLose()) {

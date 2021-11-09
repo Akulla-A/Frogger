@@ -4,8 +4,12 @@ import gameCommons.Game;
 import gameCommons.Main;
 import graphicalElements.Element;
 import util.Case;
+import util.Sprite;
+import util.SpriteCase;
+import util.SpriteLoader;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,6 +22,9 @@ public class Lane {
 	private double density;
 	private int tic = 0;
 	private ArrayList<ICaseSpecial> specialCases = new ArrayList<>();
+	private ArrayList<SpriteCase> roadCases = new ArrayList<>();
+	public static final BufferedImage bottomSprite = SpriteLoader.getPicture("roadbottom.png");
+	public static final BufferedImage topSprite = SpriteLoader.getPicture("roadtop.png");
 
 	public Lane(Game game, int ord){
 		this.game = game;
@@ -34,15 +41,18 @@ public class Lane {
 
 			if(c != null){
 				specialCases.add(c);
+				game.getGraphic().add(c, 3);
 			}
+		}
+
+		for(int i = 0; i < game.width; i++){
+			SpriteCase c = new SpriteCase(i, ord, (ord % 2 == 0) ? topSprite : bottomSprite);
+			roadCases.add(c);
+			game.getGraphic().add(c, 0);
 		}
 	}
 
 	public void update() {
-		for (ICaseSpecial c : specialCases){
-			this.game.getGraphic().add((Element)c);
-		}
-
 		for(int i = 0; i < cars.size(); i++){
 			Car c = cars.get(i);
 
@@ -108,6 +118,7 @@ public class Lane {
 
 				if(spec.deleteOnUse()){
 					specialCases.remove(spec);
+					game.getGraphic().remove(spec, 3);
 				}
 
 				return spec;

@@ -41,6 +41,7 @@ public class LaneInf {
 
             if(c != null){
                 specialCases.add(c);
+                game.getGraphic().add(c, 3);
             }
         }
     }
@@ -97,10 +98,6 @@ public class LaneInf {
         if(this.speed == 0)
             return;
 
-        for (ICaseSpecial c : specialCases){
-            this.game.getGraphic().add((Element)c);
-        }
-
         for(int i = 0; i < cars.size(); i++){
             CarInf c = cars.get(i);
             if(c.update(tic % speed == 0)) {
@@ -110,10 +107,6 @@ public class LaneInf {
         }
 
         mayAddCar();
-        /*if (game.getFrog().getDirection() == Direction.up) {
-
-            this.ord += 1;
-        }*/
     }
 
     public void updateOutside(){
@@ -179,6 +172,7 @@ public class LaneInf {
 
                 if(spec.deleteOnUse()){
                     specialCases.remove(spec);
+                    game.getGraphic().remove(spec, 3);
                 }
 
                 return spec;
