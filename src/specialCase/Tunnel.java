@@ -2,6 +2,7 @@ package specialCase;
 
 import environment.ICaseSpecial;
 import frog.Frog;
+import gameCommons.IFrog;
 import graphicalElements.Element;
 import util.Case;
 import util.Direction;
@@ -14,7 +15,7 @@ public class Tunnel extends Element implements ICaseSpecial {
     }
 
     @Override
-    public void onFrogMove(Frog frog) {
+    public void onFrogMove(IFrog frog) {
         Direction c;
         Case pos = frog.getPosition();
 
@@ -49,5 +50,10 @@ public class Tunnel extends Element implements ICaseSpecial {
     }
 
     @Override
-    public boolean deleteOnUse() { return false; };
+    public boolean deleteOnUse() { return false; }
+
+    @Override
+    public Tunnel recreate(int absc, int ord){
+        return new Tunnel(absc, ord);
+    }
 }

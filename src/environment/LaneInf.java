@@ -2,6 +2,8 @@ package environment;
 
 import gameCommons.Game;
 import gameCommons.GameInf;
+import gameCommons.Main;
+import graphicalElements.Element;
 import util.Case;
 import util.Direction;
 
@@ -16,6 +18,7 @@ public class LaneInf {
     private boolean leftToRight;
     private double density;
     private int tic = 0;
+    private ArrayList<ICaseSpecial> specialCases;
 
     public LaneInf(GameInf game, int ord, int speed){
         this(game, ord);
@@ -25,12 +28,21 @@ public class LaneInf {
     public LaneInf(GameInf game, int ord){
         this.game = game;
         this.ord = ord;
+        this.specialCases = new ArrayList<>();
 
         // aléatoire
         Random r = new Random();
         this.speed = r.nextInt(3) + 1;
         this.leftToRight = r.nextBoolean();
         this.density = r.nextDouble()%0.01+0.05;
+
+        for(int i = 0; i < game.width; i++){
+            ICaseSpecial c = Main.getSpecialCase(i, ord);
+
+            if(c != null){
+                specialCases.add(c);
+            }
+        }
     }
 
     public LaneInf(LaneInf l, int newOrd){
@@ -46,6 +58,14 @@ public class LaneInf {
         for (CarInf car : cars){
             car.newOrd(newOrd);
         }
+
+        ArrayList<ICaseSpecial> newCases = new ArrayList<>();
+
+        for (ICaseSpecial spec : l.specialCases){
+            newCases.add(spec.recreate(spec.getPosition().absc, newOrd));
+        }
+
+        this.specialCases = newCases;
     }
 
     //ajoute un entier i en paramètre à l'attribut ord
@@ -54,16 +74,20 @@ public class LaneInf {
         for (CarInf car : cars){
             car.newOrd(this.ord);
         }
+
+        ArrayList<ICaseSpecial> newCases = new ArrayList<>();
+
+        for (ICaseSpecial spec : this.specialCases){
+            newCases.add(spec.recreate(spec.getPosition().absc, this.ord));
+        }
+
+        this.specialCases = newCases;
     }
 
     //soustrait un entier i en paramètre à l'attribut ord
     public void subOrd(int i){
-        this.ord -= i;
-        for (CarInf car : cars){
-            car.newOrd(this.ord);
-        }
+        this.addOrd(-i);
     }
-
 
     public int getOrd(){
         return ord;
@@ -72,6 +96,10 @@ public class LaneInf {
     public void update() {
         if(this.speed == 0)
             return;
+
+        for (ICaseSpecial c : specialCases){
+            this.game.getGraphic().add((Element)c);
+        }
 
         for(int i = 0; i < cars.size(); i++){
             CarInf c = cars.get(i);
@@ -143,6 +171,21 @@ public class LaneInf {
             return new Case(-1, ord);
 
         return new Case(game.width, ord);
+    }
+
+    public ICaseSpecial getSpecialCases(Case frogCase){
+        for(ICaseSpecial spec : specialCases){
+            if(spec.getPosition().absc == frogCase.absc){
+
+                if(spec.deleteOnUse()){
+                    specialCases.remove(spec);
+                }
+
+                return spec;
+            }
+        }
+
+        return null;
     }
 
     public String toString(){

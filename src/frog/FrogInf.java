@@ -1,5 +1,6 @@
 package frog;
 
+import environment.ICaseSpecial;
 import environment.LaneInf;
 import gameCommons.Game;
 import gameCommons.GameInf;
@@ -13,6 +14,7 @@ public class FrogInf implements IFrog {
     private int aliveTicks = 0;
     private Case pos;
     private Direction dir;
+    private boolean gonnaDie = false;
 
     public void setAlive(boolean state){
         alive = state;
@@ -32,7 +34,7 @@ public class FrogInf implements IFrog {
 
     public FrogInf(GameInf game){
         this.game = game;
-        this.pos = new Case((int)game.width/2, 1);
+        this.pos = new Case(game.width/2, 1);
     }
 
     public Case getPosition(){
@@ -71,6 +73,18 @@ public class FrogInf implements IFrog {
         if(0 <= c.absc && c.absc < game.width && 0 <= c.ord && c.ord < game.height){
             this.dir = key;
             this.pos = c;
+
+            ICaseSpecial specCase = game.getEnvironment().getSpecialFrogCase(pos);
+
+            if(specCase != null){
+                specCase.onFrogMove(this);
+            }
         }
     }
+
+    @Override
+    public void setGonnaDie(boolean state) { gonnaDie = true; }
+
+    @Override
+    public boolean isGonnaDie(){ return gonnaDie; }
 }

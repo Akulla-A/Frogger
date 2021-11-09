@@ -2,6 +2,7 @@ package specialCase;
 
 import environment.ICaseSpecial;
 import frog.Frog;
+import gameCommons.IFrog;
 import graphicalElements.Element;
 import util.Case;
 
@@ -13,7 +14,7 @@ public class Ice extends Element implements ICaseSpecial {
     }
 
     @Override
-    public void onFrogMove(Frog frog) {
+    public void onFrogMove(IFrog frog) {
         frog.move(frog.getDirection());
     }
 
@@ -28,5 +29,10 @@ public class Ice extends Element implements ICaseSpecial {
     }
 
     @Override
-    public boolean deleteOnUse() { return false; };
+    public boolean deleteOnUse() { return false; }
+
+    @Override
+    public Ice recreate(int absc, int ord){
+        return new Ice(absc, ord);
+    }
 }

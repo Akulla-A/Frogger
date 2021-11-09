@@ -13,10 +13,14 @@ public class Frog implements IFrog {
 	protected int aliveTicks = 0;
 	protected Case pos;
 	protected Direction dir;
+	protected boolean gonnaDie = false;
 
 	public void setAlive(boolean state){
 		alive = state;
 	}
+
+	public void setGonnaDie(boolean state) { gonnaDie = true; }
+	public boolean isGonnaDie(){ return gonnaDie; }
 
 	public boolean isAlive(){
 		return alive;
@@ -32,7 +36,7 @@ public class Frog implements IFrog {
 
 	public Frog(Game game){
 		this.game = game;
-		this.pos = new Case((int)game.width/2, 0);
+		this.pos = new Case(game.width/2, 0);
 	}
 
 	public Case getPosition(){

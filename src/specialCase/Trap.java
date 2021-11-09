@@ -2,6 +2,7 @@ package specialCase;
 
 import environment.ICaseSpecial;
 import frog.Frog;
+import gameCommons.IFrog;
 import graphicalElements.Element;
 import util.Case;
 
@@ -13,8 +14,8 @@ public class Trap extends Element implements ICaseSpecial {
     }
 
     @Override
-    public void onFrogMove(Frog frog) {
-        frog.setAlive(false); // A fix
+    public void onFrogMove(IFrog frog) {
+        frog.setGonnaDie(false);
     }
 
     @Override
@@ -28,5 +29,10 @@ public class Trap extends Element implements ICaseSpecial {
     }
 
     @Override
-    public boolean deleteOnUse() { return true; };
+    public boolean deleteOnUse() { return true; }
+
+    @Override
+    public Trap recreate(int absc, int ord){
+        return new Trap(absc, ord);
+    }
 }

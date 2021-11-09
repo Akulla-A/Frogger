@@ -20,7 +20,7 @@ public class Game {
 	protected IEnvironment environment;
 	protected Frog frog;
 	protected IFroggerGraphics graphic;
-	protected float startTime;
+	protected long startTime;
 
 	/**
 	 * 
@@ -82,7 +82,7 @@ public class Game {
 	 * @return true si le partie est perdue
 	 */
 	public boolean testLose() {
-		if(frog.isAlive() && !this.environment.isSafe(frog.getPosition())){
+		if(frog.isAlive() && (!this.environment.isSafe(frog.getPosition()) || frog.isGonnaDie())){
 			frog.setAlive(false);
 			return true;
 		}
@@ -114,9 +114,10 @@ public class Game {
 		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
 
 		if(testWin()){
-			this.graphic.endGameScreen("Vous avez gagné : " + (System.currentTimeMillis()-this.startTime)*1000 + " sec");
+			this.graphic.endGameScreen("Vous avez gagné : " + (System.currentTimeMillis()-this.startTime)/1000 + " sec");
 		} else if(testLose()){
-			this.graphic.endGameScreen("Vous avez survécu : " + (System.currentTimeMillis()-this.startTime)*1000 + " sec");
+			System.out.println(System.currentTimeMillis() + " : " + this.startTime);
+			this.graphic.endGameScreen("Vous avez survécu : " + (System.currentTimeMillis()-this.startTime)/1000 + " sec");
 		}
 	}
 

@@ -24,6 +24,7 @@ public class GameInf {
     private FrogInf frog;
     private IFroggerGraphics graphic;
     private int score = 0;
+    protected long startTime;
 
     /**
      * @param graphic             l'interface graphique
@@ -39,8 +40,8 @@ public class GameInf {
         this.height = height;
         this.minSpeedInTimerLoops = minSpeedInTimerLoop;
         this.defaultDensity = defaultDensity;
+        this.startTime = System.currentTimeMillis();
     }
-
 
 
     public FrogInf getFrog() {
@@ -79,19 +80,12 @@ public class GameInf {
      * @return true si le partie est perdue
      */
     public boolean testLose() {
-        if (frog.isAlive() && !this.environment.isSafe(frog.getPosition())) {
+        if(frog.isAlive() && (!this.environment.isSafe(frog.getPosition()) || frog.isGonnaDie())){
             frog.setAlive(false);
             return true;
         }
         return false;
     }
-
-    /**
-     * Teste si la partie est gagnee et lance un �cran de fin appropri� si tel
-     * est le cas
-     *
-     * @return true si la partie est gagn�e
-     */
 
     /**
      * Actualise l'environnement, affiche la grenouille et verifie la fin de
@@ -104,7 +98,7 @@ public class GameInf {
         frog.addAliveTime();
 
         if (testLose()) {
-            this.graphic.endGameScreen("Vous avez perdu avec un score de : " + score);
+            this.graphic.endGameScreen("Score : " + score + ". En " + (System.currentTimeMillis()-this.startTime)/1000 + " sec");
         }
     }
 

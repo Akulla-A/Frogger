@@ -106,20 +106,12 @@ public class EnvInf implements IEnvironment {
 
     @Override
     public ICaseSpecial getSpecialFrogCase(Case frogCase){
-        /*
-        for(Lane l : routes){
+        for(LaneInf l : routes){
             if(l.getOrd() == frogCase.ord){
-                for(ICaseSpecial spec : l.getSpeciaLCases()){
-                    if(spec.getPosition().absc == frogCase.absc){
-                        return spec;
-                    }
-                }
+                return l.getSpecialCases(frogCase);
             }
         }
-        */
 
         return null;
     }
-
-
 }
