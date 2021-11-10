@@ -13,9 +13,11 @@ public class Environment implements IEnvironment {
     public Environment(Game game){
         this.game = game;
 
-        for(int i = 1; i < game.height-1; i++){
+        for(int i = 1; i < game.height-2; i++){
             this.routes.add(new Lane(game, i));
         }
+
+        this.routes.add(new Lane(game, game.height-2, 0));
     }
 
     @Override

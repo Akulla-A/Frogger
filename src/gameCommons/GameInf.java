@@ -116,6 +116,7 @@ public class GameInf {
         ++score;
     }
     public void subScore(){
-        --score;
+        if(score > 0)
+            --score;
     }
 }

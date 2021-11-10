@@ -65,11 +65,9 @@ public class FrogInf implements IFrog, Sprite {
         switch(key){
             case up:
                 game.getEnvironment().addLane();
-                game.addScore();
                 break;
             case down:
                 game.getEnvironment().backLane();
-                game.subScore();
                 break;
             case left:
                 c = new Case(pos.absc - 1, pos.ord);

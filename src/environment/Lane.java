@@ -25,28 +25,47 @@ public class Lane {
 	private ArrayList<SpriteCase> roadCases = new ArrayList<>();
 	public static final BufferedImage bottomSprite = SpriteLoader.getPicture("roadbottom.png");
 	public static final BufferedImage topSprite = SpriteLoader.getPicture("roadtop.png");
+	public static final BufferedImage concreteSprite = SpriteLoader.getPicture("concrete.png");
 
 	public Lane(Game game, int ord){
+		this(game, ord, new Random().nextInt(3) + 1);
+	}
+
+	public Lane(Game game, int ord, int speed){
 		this.game = game;
 		this.ord = ord;
 
 		// aléatoire
 		Random r = new Random();
-		this.speed = r.nextInt(3) + 1;
+		this.speed = speed;
 		this.leftToRight = r.nextBoolean();
 		this.density = r.nextDouble()%0.01+0.025;
 
-		for(int i = 0; i < game.width; i++){
-			ICaseSpecial c = Main.getSpecialCase(i, ord);
+		if (speed != 0){
+			for(int i = 0; i < game.width; i++){
+				ICaseSpecial c = Main.getSpecialCase(i, ord);
 
-			if(c != null){
-				specialCases.add(c);
-				game.getGraphic().add(c, 3);
+				if(c != null){
+					specialCases.add(c);
+					game.getGraphic().add(c, 3);
+				}
 			}
 		}
 
 		for(int i = 0; i < game.width; i++){
-			SpriteCase c = new SpriteCase(i, ord, (ord % 2 == 0) ? topSprite : bottomSprite);
+			BufferedImage sprite;
+
+			if(speed == 0){
+				sprite = concreteSprite;
+			} else {
+				if(ord % 2 == 0){
+					sprite = topSprite;
+				} else {
+					sprite = bottomSprite;
+				}
+			}
+
+			SpriteCase c = new SpriteCase(i, ord, sprite);
 			roadCases.add(c);
 			game.getGraphic().add(c, 0);
 		}
@@ -56,7 +75,7 @@ public class Lane {
 		for(int i = 0; i < cars.size(); i++){
 			Car c = cars.get(i);
 
-			if(c.update(tic % speed == 0)){
+			if(c.update(speed != 0 && tic % speed == 0)){
 				cars.remove(c);
 				--i;
 			}

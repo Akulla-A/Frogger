@@ -6,7 +6,10 @@ import gameCommons.Main;
 import graphicalElements.Element;
 import util.Case;
 import util.Direction;
+import util.SpriteCase;
+import util.SpriteLoader;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,30 +22,47 @@ public class LaneInf {
     private double density;
     private int tic = 0;
     private ArrayList<ICaseSpecial> specialCases;
-
-    public LaneInf(GameInf game, int ord, int speed){
-        this(game, ord);
-        this.speed = speed;
-    }
+    private ArrayList<SpriteCase> roadCases;
 
     public LaneInf(GameInf game, int ord){
+        this(game, ord, new Random().nextInt(3) + 1);
+    }
+
+    public LaneInf(GameInf game, int ord, int speed){
         this.game = game;
         this.ord = ord;
+        this.speed = speed;
         this.specialCases = new ArrayList<>();
+        this.roadCases = new ArrayList<>();
 
         // aléatoire
         Random r = new Random();
-        this.speed = r.nextInt(3) + 1;
         this.leftToRight = r.nextBoolean();
         this.density = r.nextDouble()%0.01+0.05;
 
-        for(int i = 0; i < game.width; i++){
-            ICaseSpecial c = Main.getSpecialCase(i, ord);
+        if(speed != 0){
+            for(int i = 0; i < game.width; i++){
+                ICaseSpecial c = Main.getSpecialCase(i, ord);
 
-            if(c != null){
-                specialCases.add(c);
-                game.getGraphic().add(c, 3);
+                if(c != null){
+                    specialCases.add(c);
+                    game.getGraphic().add(c, 3);
+                }
             }
+        }
+
+        for(int i = 0; i < game.width; i++){
+            BufferedImage sprite;
+
+            if(ord % 2 == 0){
+                sprite = Lane.topSprite;
+            } else {
+                sprite = Lane.bottomSprite;
+            }
+
+            SpriteCase c = new SpriteCase(i, ord, sprite);
+            roadCases.add(c);
+            game.getGraphic().add(c, 0);
         }
     }
 
@@ -54,6 +74,7 @@ public class LaneInf {
         this.leftToRight = l.leftToRight;
         this.density = l.density;
         this.tic = l.tic;
+        this.roadCases = new ArrayList<>();
 
         // Modifier ord des voitures
         for (CarInf car : cars){
@@ -63,15 +84,30 @@ public class LaneInf {
         ArrayList<ICaseSpecial> newCases = new ArrayList<>();
 
         for (ICaseSpecial spec : l.specialCases){
-            newCases.add(spec.recreate(spec.getPosition().absc, newOrd));
+            game.getGraphic().remove(spec, 3);
+
+            ICaseSpecial newSpec = spec.recreate(spec.getPosition().absc, newOrd);
+            newCases.add(newSpec);
+            game.getGraphic().add(newSpec, 3);
         }
 
+        ArrayList<SpriteCase> newRoadCases = new ArrayList<>();
+        for(SpriteCase spr : this.roadCases){
+            game.getGraphic().remove(spr, 0);
+
+            SpriteCase c = new SpriteCase(spr.absc, this.ord, spr.getSprite());
+            newRoadCases.add(c);
+            game.getGraphic().add(c, 0);
+        }
+
+        this.roadCases = newRoadCases;
         this.specialCases = newCases;
     }
 
     //ajoute un entier i en paramètre à l'attribut ord
     public void addOrd(int i){
         this.ord += i;
+
         for (CarInf car : cars){
             car.newOrd(this.ord);
         }
@@ -79,10 +115,24 @@ public class LaneInf {
         ArrayList<ICaseSpecial> newCases = new ArrayList<>();
 
         for (ICaseSpecial spec : this.specialCases){
-            newCases.add(spec.recreate(spec.getPosition().absc, this.ord));
+            game.getGraphic().remove(spec, 3);
+
+            ICaseSpecial newSpec = spec.recreate(spec.getPosition().absc, this.ord);
+            newCases.add(newSpec);
+            game.getGraphic().add(newSpec, 3);
+        }
+
+        ArrayList<SpriteCase> newRoadCases = new ArrayList<>();
+        for(SpriteCase spr : this.roadCases){
+            game.getGraphic().remove(spr, 0);
+
+            SpriteCase c = new SpriteCase(spr.absc, this.ord, spr.getSprite());
+            newRoadCases.add(c);
+            game.getGraphic().add(c, 0);
         }
 
         this.specialCases = newCases;
+        this.roadCases = newRoadCases;
     }
 
     //soustrait un entier i en paramètre à l'attribut ord
@@ -110,6 +160,9 @@ public class LaneInf {
     }
 
     public void updateOutside(){
+        if(this.speed == 0)
+            return;
+
         for(int i = 0; i < cars.size(); i++){
             CarInf c = cars.get(i);
             if(c.updateOutside(tic % speed == 0)) {
@@ -143,7 +196,7 @@ public class LaneInf {
      * densit�, si la premi�re case de la voie est vide
      */
     private void mayAddCar() {
-        if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
+        if (this.speed != 0 && isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
             double rnd = game.randomGen.nextDouble();
 
             if (rnd < density) {

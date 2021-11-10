@@ -100,6 +100,9 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	}
 
 	public void add(Sprite e, int index) {
+		if(index == 3){
+			//System.out.println(this.spriteToDisplay.get(index).size());
+		}
 		this.spriteToDisplay.get(index).add(e);
 	}
 

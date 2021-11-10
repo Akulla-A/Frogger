@@ -1,18 +1,15 @@
 package environment;
 
-import gameCommons.Game;
 import gameCommons.IEnvironment;
-import graphicalElements.Element;
 import util.Case;
-import util.Direction;
 import gameCommons.GameInf;
 import java.util.ArrayList;
 
 public class EnvInf implements IEnvironment {
     private ArrayList<LaneInf> routes = new ArrayList<>();
-    private GameInf game;
+    private final GameInf game;
     private int height;
-    private ArrayList<LaneInf> backRoutes = new ArrayList<>();
+    private final ArrayList<LaneInf> backRoutes = new ArrayList<>();
 
     public EnvInf(GameInf game){
         this.game = game;
@@ -30,15 +27,16 @@ public class EnvInf implements IEnvironment {
     @Override
     public void addLane(){
         ArrayList<LaneInf> newRoutes = new ArrayList<>();
+        game.addScore();
 
         for (LaneInf r : routes) {
-            if (r.getOrd() == 0) {
-                backRoutes.add(r);
-                continue;
-            }
+            LaneInf newLane = new LaneInf(r, r.getOrd() - 1);
 
-            LaneInf newLane = new LaneInf(r , r.getOrd() - 1);
-            newRoutes.add(newLane);
+            if (r.getOrd() < 0) {
+                backRoutes.add(newLane);
+            } else {
+                newRoutes.add(newLane);
+            }
         }
 
         LaneInf topLane = new LaneInf (game, game.height);
@@ -48,8 +46,10 @@ public class EnvInf implements IEnvironment {
     }
 
     public void backLane(){
-        if(backRoutes.size() < 1)
+        if(backRoutes.size() == 0)
             return;
+
+        game.subScore();
 
         for(int i = 0; i < routes.size(); i++){
             if(i < game.height){
@@ -60,8 +60,10 @@ public class EnvInf implements IEnvironment {
             }
         }
 
-        LaneInf last = new LaneInf(backRoutes.get(backRoutes.size()-1), 0);
-        backRoutes.remove(backRoutes.size()-1);
+        LaneInf oldRoute = backRoutes.get(backRoutes.size()-1);
+
+        LaneInf last = new LaneInf(oldRoute, 0);
+        backRoutes.remove(oldRoute);
         routes.add(0, last);
     }
 
