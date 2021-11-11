@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Tunnel extends Element implements ICaseSpecial {
-    public static final BufferedImage sprite = SpriteLoader.getPicture("trap.png");
+    public static final BufferedImage sprite = SpriteLoader.getPicture("concrete.png");
     public Tunnel(int abs, int ord){
         super(abs, ord, Color.BLACK);
     }

@@ -108,7 +108,7 @@ public class Lane {
 	 * densit�, si la premi�re case de la voie est vide
 	 */
 	private void mayAddCar() {
-		if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
+		if (speed != 0 && isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
 			double rnd = game.randomGen.nextDouble();
 
 			if (rnd < density) {
