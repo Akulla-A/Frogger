@@ -1,12 +1,10 @@
 package environment;
 
 import gameCommons.Game;
+import gameCommons.IFrog;
 import gameCommons.Main;
 import graphicalElements.Element;
-import util.Case;
-import util.Sprite;
-import util.SpriteCase;
-import util.SpriteLoader;
+import util.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -26,22 +24,27 @@ public class Lane {
 	public static final BufferedImage bottomSprite = SpriteLoader.getPicture("roadbottom.png");
 	public static final BufferedImage topSprite = SpriteLoader.getPicture("roadtop.png");
 	public static final BufferedImage concreteSprite = SpriteLoader.getPicture("concrete.png");
+	public static final BufferedImage spriteWater = SpriteLoader.getPicture("water.png");
 
-	public Lane(Game game, int ord){
-		this(game, ord, new Random().nextInt(3) + 1);
+	private boolean isRondin;
+
+	public Lane(Game game, int ord, boolean isRondin){
+		this(game, ord, new Random().nextInt(2) + 1, isRondin);
 	}
 
-	public Lane(Game game, int ord, int speed){
+	public Lane(Game game, int ord, int speed, boolean isRondin){
 		this.game = game;
 		this.ord = ord;
+		this.isRondin = isRondin;
 
 		// aléatoire
 		Random r = new Random();
-		this.speed = speed;
+		this.speed = (isRondin ? 3 : 1);
 		this.leftToRight = r.nextBoolean();
-		this.density = r.nextDouble()%0.01+0.025;
 
-		if (speed != 0){
+		this.density = r.nextDouble()%0.01+(isRondin ? 0.05 : 0.025);
+
+		if (speed != 0 && !isRondin){
 			for(int i = 0; i < game.width; i++){
 				ICaseSpecial c = Main.getSpecialCase(i, ord);
 
@@ -57,6 +60,8 @@ public class Lane {
 
 			if(speed == 0){
 				sprite = concreteSprite;
+			} else if (isRondin){
+				sprite = spriteWater;
 			} else {
 				if(ord % 2 == 0){
 					sprite = topSprite;
@@ -72,12 +77,25 @@ public class Lane {
 	}
 
 	public void update() {
-		for(int i = 0; i < cars.size(); i++){
-			Car c = cars.get(i);
+		IFrog frog = this.game.getFrog();
+		Case pos = frog.getPosition();
+		++tic;
+		boolean alreadyMove = false;
+		boolean canSpawn = true;
 
-			if(c.update(speed != 0 && tic % speed == 0)){
+		for(int i = 0; i < cars.size(); i++){
+			boolean carTickMove = (speed != 0 && tic % speed == 0);
+			Car c = cars.get(i);
+			boolean inBounds = c.inBounds(pos);
+
+			if(c.update(carTickMove)){
 				cars.remove(c);
 				--i;
+			}
+
+			if(this.isRondin && inBounds && carTickMove && !alreadyMove){
+				alreadyMove = true;
+				frog.move(leftToRight ? Direction.right : Direction.left);
 			}
 		}
 
@@ -90,13 +108,23 @@ public class Lane {
 	}
 
 	public boolean isSafe(Case c){
+		if(c.ord != ord){
+			return true;
+		}
+
+		boolean onCar = false;
+
 		for(Car car : cars){
 			if(car.inBounds(c)){
-				return false;
+				onCar = true;
 			}
 		}
 
-		return true;
+		return onCar == isRondin;
+	}
+
+	public boolean isRondin(){
+		return isRondin;
 	}
 
 	/*
@@ -108,11 +136,18 @@ public class Lane {
 	 * densit�, si la premi�re case de la voie est vide
 	 */
 	private void mayAddCar() {
-		if (speed != 0 && isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
+		boolean isFirstSafe = isSafe(getFirstCase());
+		boolean isBeforeSafe = isSafe(getBeforeFirstCase());
+
+		isFirstSafe = (isRondin != isFirstSafe);
+		isBeforeSafe = (isRondin != isBeforeSafe);
+		boolean isPreLengthSafe = (isRondin != isSafe(new Case(getFirstCase().absc + 5, getFirstCase().ord)));
+
+		if (speed != 0 && isFirstSafe && isBeforeSafe && (!isRondin || isPreLengthSafe)) {
 			double rnd = game.randomGen.nextDouble();
 
 			if (rnd < density) {
-				cars.add(new Car(game, getBeforeFirstCase(), leftToRight));
+				cars.add(new Car(game, getBeforeFirstCase(), leftToRight, isRondin));
 			}
 		}
 	}

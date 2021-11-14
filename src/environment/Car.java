@@ -25,19 +25,20 @@ public class Car {
 	private boolean rondin;
 	private ArrayList<SpriteCase> roadCases = new ArrayList<>();
 	public static final ArrayList<ArrayList<BufferedImage>> spriteCar = new ArrayList<>();
+	public static final BufferedImage spriteRondin = SpriteLoader.getPicture("rondin.png");
+
+	private boolean isRondin = false;
 
 	public Case getCarPosition(){
-		int ord = this.leftPosition.ord-1;
-		int absc = this.leftPosition.ord;
-		Case position = new Case(absc, ord);
-		return position;
+		return leftPosition;
 	}
 
-	public Car(Game game, Case leftPosition, boolean leftToRight, int length){
+	public Car(Game game, Case leftPosition, boolean leftToRight, int length, boolean isRondin){
 		this.game = game;
 		this.leftPosition = leftPosition;
 		this.leftToRight = leftToRight;
-		this.length = length;
+		this.length = (isRondin ? 5 : length);
+		this.isRondin = isRondin;
 
 		if (spriteCar.size() < 3){
 			// Pour de la taille 1 jusqu'a 3
@@ -55,14 +56,19 @@ public class Car {
 
 		for(int i = 0; i < length; i++){
 			// Initialiser toute la liste
-			SpriteCase c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteCar.get(length-1).get(i + (leftToRight ? length : 0)));
+			SpriteCase c;
+			if (isRondin){
+				c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteRondin);
+			} else {
+				c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteCar.get(length-1).get(i + (leftToRight ? length : 0)));
+			}
 			roadCases.add(c);
 			game.getGraphic().add(c, 3);
 		}
 	}
 
-	public Car(Game game, Case leftPosition, boolean leftToRight){
-		this(game, leftPosition, leftToRight, (new Random()).nextInt(3)+1);
+	public Car(Game game, Case leftPosition, boolean leftToRight, boolean isRondin){
+		this(game, leftPosition, leftToRight, (new Random()).nextInt(3)+1, isRondin);
 	}
 
 	//TODO : ajout de methodes
@@ -81,7 +87,14 @@ public class Car {
 			} else {
 				for(int i = 0; i < length; i++){
 					// Initialiser toute la liste
-					SpriteCase c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteCar.get(length-1).get(i + (leftToRight ? length : 0)));
+					SpriteCase c;
+
+					if (isRondin){
+						c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteRondin);
+					} else {
+						c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteCar.get(length-1).get(i + (leftToRight ? length : 0)));
+					}
+
 					roadCases.add(c);
 					game.getGraphic().add(c, 3);
 				}
@@ -101,13 +114,6 @@ public class Car {
 			}
 			game.getGraphic()
 					.add(new Element(leftPosition.absc + i, leftPosition.ord, color));
-		}
-	}
-
-	public void isRondin(boolean rondin){
-		int absc = this.game.getFrog().getPosition().ord + 1;
-		if(this.rondin == true & this.game.getFrog().getPosition() == this.getCarPosition()){
-			this.game.getFrog().move(Direction.left);
 		}
 	}
 

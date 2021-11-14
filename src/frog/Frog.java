@@ -13,12 +13,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Frog implements IFrog, Sprite {
-	protected Game game;
-	protected boolean alive = true;
-	protected int aliveTicks = 0;
-	protected Case pos;
-	protected Direction dir;
-	protected boolean gonnaDie = false;
+	private Game game;
+	private boolean alive = true;
+	private int aliveTicks = 0;
+	private Case pos;
+	private Direction dir;
+	private boolean gonnaDie = false;
 
 	public static final BufferedImage sprite = SpriteLoader.getPicture("frog_bottom.png");
 
@@ -27,6 +27,7 @@ public class Frog implements IFrog, Sprite {
 	}
 
 	public void setGonnaDie(boolean state) { gonnaDie = true; }
+
 	public boolean isGonnaDie(){ return gonnaDie; }
 
 	public boolean isAlive(){
