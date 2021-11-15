@@ -1,13 +1,9 @@
 package environment;
 
-import gameCommons.Game;
 import gameCommons.GameInf;
 import gameCommons.Main;
-import graphicalElements.Element;
 import util.Case;
-import util.Direction;
 import util.SpriteCase;
-import util.SpriteLoader;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -25,7 +21,7 @@ public class LaneInf {
     private ArrayList<SpriteCase> roadCases;
 
     public LaneInf(GameInf game, int ord){
-        this(game, ord, new Random().nextInt(3) + 1);
+        this(game, ord, new Random().nextInt(1) + 1);
     }
 
     public LaneInf(GameInf game, int ord, int speed){
@@ -145,6 +141,7 @@ public class LaneInf {
     }
 
     public void update() {
+        ++this.tic;
         if(this.speed == 0)
             return;
 
@@ -160,6 +157,7 @@ public class LaneInf {
     }
 
     public void updateOutside(){
+        ++this.tic;
         if(this.speed == 0)
             return;
 

@@ -1,19 +1,15 @@
 package graphicalElements;
 
-import frog.Frog;
 import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
 import util.Sprite;
-import util.SpriteLoader;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListener {
 	private ArrayList<Element> elementsToDisplay;
@@ -100,9 +96,6 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	}
 
 	public void add(Sprite e, int index) {
-		if(index == 3){
-			//System.out.println(this.spriteToDisplay.get(index).size());
-		}
 		this.spriteToDisplay.get(index).add(e);
 	}
 

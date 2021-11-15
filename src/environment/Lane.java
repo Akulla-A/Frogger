@@ -3,10 +3,11 @@ package environment;
 import gameCommons.Game;
 import gameCommons.IFrog;
 import gameCommons.Main;
-import graphicalElements.Element;
-import util.*;
+import util.Case;
+import util.Direction;
+import util.SpriteCase;
+import util.SpriteLoader;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,8 +40,8 @@ public class Lane {
 
 		// aléatoire
 		Random r = new Random();
-		this.speed = (isRondin ? 3 : 1);
-		this.leftToRight = r.nextBoolean();
+		this.speed = (isRondin ? 2 : 1);
+		this.leftToRight = ord%2==0;
 
 		this.density = r.nextDouble()%0.01+(isRondin ? 0.05 : 0.025);
 

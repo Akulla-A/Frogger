@@ -1,8 +1,6 @@
 package environment;
 
-import gameCommons.Game;
 import gameCommons.GameInf;
-import graphicalElements.Element;
 import util.Case;
 import util.SpriteCase;
 import util.SpriteLoader;
@@ -81,7 +79,7 @@ public class CarInf {
             }
         }
 
-        addToGraphics();
+        //addToGraphics();
         return false;
     }
 
@@ -92,12 +90,14 @@ public class CarInf {
             if(this.leftPosition.absc >= game.width || this.leftPosition.absc < -length){
                 return true;
             }
+            removeSprites();
         }
 
         return false;
     }
 
     /* Fourni : addToGraphics() permettant d'ajouter un element graphique correspondant a la voiture*/
+    /*
     private void addToGraphics() {
         for (int i = 0; i < length; i++) {
             Color color = colorRtL;
@@ -108,10 +108,13 @@ public class CarInf {
                     .add(new Element(leftPosition.absc + i, leftPosition.ord, color));
         }
     }
+    */
 
     public void removeSprites(){
         for(SpriteCase e : roadCases){
             game.getGraphic().remove(e, 3);
         }
+
+        roadCases = new ArrayList<SpriteCase> ();
     }
 }
