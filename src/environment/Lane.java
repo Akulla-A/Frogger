@@ -110,7 +110,7 @@ public class Lane {
 		}
 	}
 
-	public void update() {
+	public void update(boolean force) {
 		IFrog frog1 = this.game.getFrog(false);
 		IFrog frog2 = this.game.getFrog(true);
 		Case pos1 = frog1.getPosition();
@@ -123,13 +123,14 @@ public class Lane {
 		boolean canSpawn = true;
 
 		for(int i = 0; i < cars.size(); i++){
-			boolean carTickMove = (speed != 0 && tic % speed == 0);
+			boolean carTickMove = (speed != 0 && tic % speed == 0 && !force);
 			Car c = cars.get(i);
 			boolean inBoundsFrog1 = c.inBounds(pos1);
 			boolean inBoundsFrog2 = c.inBounds(pos2);
 
 			if(c.update(carTickMove)){
 				cars.remove(c);
+				c.removeSprites(false);
 				--i;
 			}
 

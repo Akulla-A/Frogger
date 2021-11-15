@@ -20,23 +20,26 @@ public class GameInf extends Game {
         return false;
     }
 
-    /**
+    /*
      * Actualise l'environnement, affiche la grenouille et verifie la fin de
      * partie.
-     */
+    */
+
+    /*
     @Override
     public void update() {
         graphic.clear();
         environment.update();
 
-        //this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
         this.graphic.add(frog1, 4);
         this.graphic.add(frog2, 4);
 
         testLose(frog1);
+        testWin(frog1);
 
         if(frog2 != null){
             testLose(frog2);
+            testWin(frog2);
         }
 
         boolean frog2Finish = (frog2 != null && frog2.isAlive ());
@@ -57,4 +60,5 @@ public class GameInf extends Game {
             this.graphic.endGameScreen(txt1);
         }
     }
+    */
 }

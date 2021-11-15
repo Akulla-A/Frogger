@@ -1,6 +1,7 @@
 package gameCommons;
 
 import environment.ICaseSpecial;
+import frog.Frog;
 import util.Case;
 
 public interface IEnvironment {
@@ -28,9 +29,7 @@ public interface IEnvironment {
 	 */
 	public void update();
 
-	public void addLane();
-
-	public void backLane();
+	public boolean changeLane(boolean down, Frog movingFrog);
 
 	public ICaseSpecial getSpecialFrogCase(Case frogPose);
 }

@@ -115,7 +115,6 @@ public class Game {
 		graphic.clear();
 		environment.update();
 
-		//this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
 		this.graphic.add(frog1, 4);
 		this.graphic.add(frog2, 4);
 

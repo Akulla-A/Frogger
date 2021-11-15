@@ -1,6 +1,6 @@
 package gameCommons;
 
-import environment.EnvInf;
+import environment.Environment;
 import frog.Frog;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
@@ -31,8 +31,9 @@ public class MainInf {
         IFrog frog2 = new Frog(game, true);
         game.setFrog(frog2, true);
         graphic.setFrog(frog2, true);
+
         //Cr�ation et liaison de l'environnement
-        EnvInf env = new EnvInf(game);
+        Environment env = new Environment(game);
         game.setEnvironment(env);
 
         //Boucle principale : l'environnement s'actualise tous les tempo milisecondes

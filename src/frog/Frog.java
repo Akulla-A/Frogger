@@ -2,6 +2,7 @@ package frog;
 
 import environment.ICaseSpecial;
 import gameCommons.Game;
+import gameCommons.GameInf;
 import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
@@ -23,7 +24,13 @@ public class Frog implements IFrog, Sprite {
 
 	public Frog(Game game, boolean isSecond){
 		this.game = game;
-		this.pos = new Case(game.width/2, 0);
+
+		if (game instanceof GameInf){
+			this.pos = new Case(game.width/2, 1);
+		} else {
+			this.pos = new Case(game.width/2, 0);
+		}
+
 		this.startTime = System.currentTimeMillis();
 		this.isSecond = isSecond;
 	}
@@ -39,7 +46,7 @@ public class Frog implements IFrog, Sprite {
 		this.isSecond = false;
 	}
 
-	public long getStartTime(){ return startTime; };
+	public long getStartTime(){ return startTime; }
 
 	public static final BufferedImage sprite = SpriteLoader.getPicture("frog_bottom.png");
 	public static final BufferedImage sprite2 = SpriteLoader.getPicture("frog_bottom2.png");
@@ -63,6 +70,7 @@ public class Frog implements IFrog, Sprite {
 	public int getAliveTime(){
 		return aliveTicks;
 	}
+	public boolean isSecond() { return isSecond; }
 
 	@Override
 	public BufferedImage getSprite() {
@@ -72,6 +80,7 @@ public class Frog implements IFrog, Sprite {
 	public Case getPosition(){
 		return pos;
 	}
+	public void setPosition(Case pos) {this.pos = pos;}
 
 	public Direction getDirection(){
 		return dir;
@@ -79,7 +88,7 @@ public class Frog implements IFrog, Sprite {
 
 	public void setAliveEnd(long time){
 		endTime = time;
-	};
+	}
 
 	public long getAliveEndTime(){
 		return endTime != 0 ? endTime : System.currentTimeMillis();
@@ -94,9 +103,18 @@ public class Frog implements IFrog, Sprite {
 		switch(key){
 			case up:
 				c = new Case(pos.absc, pos.ord + 1);
+
+				// Le changement a déjà été géré ?
+				if ((game instanceof GameInf) && game.getEnvironment().changeLane(false, this))
+					return;
+
 				break;
 			case down:
 				c = new Case(pos.absc, pos.ord - 1);
+
+				if ((game instanceof GameInf) && game.getEnvironment().changeLane(true, this))
+					return;
+
 				break;
 			case left:
 				c = new Case(pos.absc - 1, pos.ord);
@@ -108,7 +126,7 @@ public class Frog implements IFrog, Sprite {
 				return;
 		}
 
-		if(0 <= c.absc && c.absc < game.width && 0 <= c.ord && c.ord < game.height){
+		if(0 <= c.absc && c.absc < game.width && 0 < c.ord && c.ord < game.height-1){
 			this.dir = key;
 			this.pos = c;
 
