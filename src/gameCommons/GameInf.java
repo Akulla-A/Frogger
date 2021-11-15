@@ -1,26 +1,9 @@
 package gameCommons;
 
-import frog.FrogInf;
+import frog.Frog;
 import graphicalElements.IFroggerGraphics;
 
-import java.util.Random;
-
-public class GameInf {
-    public final Random randomGen = new Random();
-
-    // Caracteristique de la partie
-    public final int width;
-    public final int height;
-    public final int minSpeedInTimerLoops;
-    public final double defaultDensity;
-
-    // Lien aux objets utilis�s
-    private IEnvironment environment;
-    private FrogInf frog;
-    private IFroggerGraphics graphic;
-    private int score = 0;
-    protected long startTime;
-
+public class GameInf extends Game {
     /**
      * @param graphic             l'interface graphique
      * @param width               largeur en cases
@@ -29,56 +12,11 @@ public class GameInf {
      * @param defaultDensity      densite de voiture utilisee par defaut pour les routes
      */
     public GameInf(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity) {
-        super();
-        this.graphic = graphic;
-        this.width = width;
-        this.height = height;
-        this.minSpeedInTimerLoops = minSpeedInTimerLoop;
-        this.defaultDensity = defaultDensity;
-        this.startTime = System.currentTimeMillis();
+        super(graphic, width, height, minSpeedInTimerLoop, defaultDensity);
     }
 
-
-    public FrogInf getFrog() {
-        return this.frog;
-    }
-
-    /**
-     * Lie l'objet frog � la partie
-     *
-     * @param frog
-     */
-    public void setFrog(IFrog frog) {
-        this.frog = (FrogInf) frog;
-    }
-
-    /**
-     * Lie l'objet environment a la partie
-     *
-     * @param environment
-     */
-    public void setEnvironment(IEnvironment environment) {
-        this.environment = environment;
-    }
-
-    /**
-     * @return l'interface graphique
-     */
-    public IFroggerGraphics getGraphic() {
-        return graphic;
-    }
-
-    /**
-     * Teste si la partie est perdue et lance un �cran de fin appropri� si tel
-     * est le cas
-     *
-     * @return true si le partie est perdue
-     */
-    public boolean testLose() {
-        if(frog.isAlive() && (!this.environment.isSafe(frog.getPosition()) || frog.isGonnaDie())){
-            frog.setAlive(false);
-            return true;
-        }
+    @Override
+    public boolean testWin(Frog frog){
         return false;
     }
 
@@ -86,32 +24,37 @@ public class GameInf {
      * Actualise l'environnement, affiche la grenouille et verifie la fin de
      * partie.
      */
+    @Override
     public void update() {
         graphic.clear();
         environment.update();
 
-        this.graphic.add(frog, 4);
+        //this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+        this.graphic.add(frog1, 4);
+        this.graphic.add(frog2, 4);
 
-        frog.addAliveTime();
+        testLose(frog1);
 
-        if (testLose()) {
-            this.graphic.endGameScreen("Score : " + score + ". En " + (System.currentTimeMillis()-this.startTime)/1000 + " sec");
+        if(frog2 != null){
+            testLose(frog2);
         }
-    }
 
-    /**
-     * Récupérer l'environnement, utilisé pour bouger la grenouille et relier cela pour les lanes
-     */
+        boolean frog2Finish = (frog2 != null && frog2.isAlive ());
+        boolean frog1Finish = frog1.isAlive();
 
-    public IEnvironment getEnvironment(){
-        return this.environment;
-    }
+        if (frog2Finish || frog1Finish){
+            return;
+        }
 
-    public void addScore(){
-        ++score;
-    }
-    public void subScore(){
-        if(score > 0)
-            --score;
+        if(frog2 != null){
+            String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition (frog1.getPosition()) ? "gagné" : "perdu") +" en " + (frog1 .getAliveEndTime()-frog1.getStartTime())/1000 + " sec";
+            String txt2 = "Grenouille 2 à " + (this.environment.isWinningPosition (frog2.getPosition()) ? "gagné" : "perdu") +" en " + (frog2.getAliveEndTime()-frog2.getStartTime())/1000 + " sec";
+
+            this.graphic.endGameScreen(txt1, txt2);
+        } else {
+            String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition (frog1.getPosition()) ? "gagné" : "perdu") +" en " + (System.currentTimeMillis()-frog1.getStartTime())/1000 + " sec";
+
+            this.graphic.endGameScreen(txt1);
+        }
     }
 }

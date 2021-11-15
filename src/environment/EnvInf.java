@@ -1,36 +1,34 @@
 package environment;
 
+import gameCommons.GameInf;
 import gameCommons.IEnvironment;
 import util.Case;
-import gameCommons.GameInf;
-import java.util.ArrayList;
 
-public class EnvInf implements IEnvironment {
-    private ArrayList<LaneInf> routes = new ArrayList<>();
-    private final GameInf game;
-    private int height;
-    private final ArrayList<LaneInf> backRoutes = new ArrayList<>();
+import java.util.ArrayList;
+import java.util.Random;
+
+public class EnvInf extends Environment implements IEnvironment {
+    private final ArrayList<Lane> backRoutes = new ArrayList<>();
 
     public EnvInf(GameInf game){
-        this.game = game;
-        height = game.height;
+        super(game);
 
         for(int i = 0; i < 2; i++){
-            this.routes.add(new LaneInf(game, i, 0));
+            this.routes.add(new Lane(game, i, 0,false));
         }
 
         for(int i = 2; i <= game.height; i++){
-            this.routes.add(new LaneInf(game, i));
+            boolean isRondin = new Random ().nextBoolean();
+            this.routes.add(new Lane(game, i, (isRondin ? 2 : 1), isRondin));
         }
     }
 
     @Override
     public void addLane(){
-        ArrayList<LaneInf> newRoutes = new ArrayList<>();
-        game.addScore();
+        ArrayList<Lane> newRoutes = new ArrayList<>();
 
-        for (LaneInf r : routes) {
-            LaneInf newLane = new LaneInf(r, r.getOrd() - 1);
+        for (Lane r : this.routes) {
+            Lane newLane = new Lane(r, r.getOrd() - 1);
 
             if (r.getOrd() < 0) {
                 backRoutes.add(newLane);
@@ -39,7 +37,7 @@ public class EnvInf implements IEnvironment {
             }
         }
 
-        LaneInf topLane = new LaneInf (game, game.height);
+        Lane topLane = new Lane(game, game.height);
         newRoutes.add(topLane);
 
         routes = newRoutes;
@@ -48,8 +46,6 @@ public class EnvInf implements IEnvironment {
     public void backLane(){
         if(backRoutes.size() == 0)
             return;
-
-        game.subScore();
 
         for(int i = 0; i < routes.size(); i++){
             if(i < game.height){
@@ -60,48 +56,15 @@ public class EnvInf implements IEnvironment {
             }
         }
 
-        LaneInf oldRoute = backRoutes.get(backRoutes.size()-1);
+        Lane oldRoute = backRoutes.get(backRoutes.size()-1);
 
-        LaneInf last = new LaneInf(oldRoute, 0);
+        Lane last = new Lane(oldRoute, 0);
         backRoutes.remove(oldRoute);
         routes.add(0, last);
     }
 
     @Override
-    public boolean isSafe(Case c) {
-        for(LaneInf route : routes){
-            if(!route.isSafe(c)){
-                return false;
-            }
-        }
-
-        return !(0 > c.absc || 0 > c.ord || c.absc >= game.width || c.ord >= game.height);
-    }
-
-    @Override
     public boolean isWinningPosition(Case c) {
         return false;
-    }
-
-    @Override
-    public void update() {
-        for(LaneInf route : routes) {
-            route.update();
-        }
-
-        for(LaneInf route : backRoutes) {
-            route.updateOutside();
-        }
-    }
-
-    @Override
-    public ICaseSpecial getSpecialFrogCase(Case frogCase){
-        for(LaneInf l : routes){
-            if(l.getOrd() == frogCase.ord){
-                return l.getSpecialCases(frogCase);
-            }
-        }
-
-        return null;
     }
 }

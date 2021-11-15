@@ -7,14 +7,15 @@ import util.Case;
 import java.util.ArrayList;
 
 public class Environment implements IEnvironment {
-    private ArrayList<Lane> routes = new ArrayList<>();
-    private Game game;
+    protected ArrayList<Lane> routes = new ArrayList<>();
+    protected Game game;
 
     public Environment(Game game){
         this.game = game;
 
         for(int i = 1; i <= game.height-2; i++){
-            this.routes.add(new Lane(game, i, i >= game.height/2));
+            boolean isRondin = (i >= game.height/2);
+            this.routes.add(new Lane(game, i, (isRondin ? 2 : 1), isRondin));
         }
     }
 

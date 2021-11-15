@@ -1,19 +1,15 @@
 package environment;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
-import frog.Frog;
-import util.Case;
 import gameCommons.Game;
 import graphicalElements.Element;
-import util.Direction;
+import util.Case;
 import util.SpriteCase;
 import util.SpriteLoader;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Car {
 	private Game game;
@@ -101,7 +97,10 @@ public class Car {
 			}
 		}
 
-		addToGraphics();
+		if(this.leftPosition.ord >= 0 && this.leftPosition.ord <= game.height){
+			addToGraphics();
+		}
+
 		return false;
 	}
 
@@ -121,5 +120,26 @@ public class Car {
 		for(SpriteCase e : roadCases){
 			game.getGraphic().remove(e, 3);
 		}
+
+		roadCases = new ArrayList<SpriteCase> ();
+
+		for(int i = 0; i < length; i++){
+			// Initialiser toute la liste
+			SpriteCase c;
+
+			if (isRondin){
+				c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteRondin);
+			} else {
+				c = new SpriteCase(leftPosition.absc + i, leftPosition.ord, spriteCar.get(length-1).get(i + (leftToRight ? length : 0)));
+			}
+			roadCases.add(c);
+			game.getGraphic().add(c, 3);
+		}
+	}
+
+	// Changer
+	public void newOrd(int ord){
+		leftPosition = new Case(leftPosition.absc, ord);
+		removeSprites ();
 	}
 }

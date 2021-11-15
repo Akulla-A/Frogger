@@ -13,25 +13,25 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Lane {
-	private Game game;
-	private int ord;
-	private int speed;
-	private ArrayList<Car> cars = new ArrayList<>();
-	private boolean leftToRight;
-	private double density;
-	private int tic = 0;
-	private ArrayList<ICaseSpecial> specialCases = new ArrayList<>();
-	private ArrayList<SpriteCase> roadCases = new ArrayList<>();
+	protected Game game;
+	protected int ord;
+	protected int speed;
+	protected ArrayList<Car> cars = new ArrayList<>();
+	protected boolean leftToRight;
+	protected double density;
+	protected int tic = 0;
+	protected ArrayList<ICaseSpecial> specialCases = new ArrayList<>();
+	protected ArrayList<SpriteCase> roadCases = new ArrayList<>();
 	public static final BufferedImage bottomSprite = SpriteLoader.getPicture("roadbottom.png");
 	public static final BufferedImage topSprite = SpriteLoader.getPicture("roadtop.png");
 	public static final BufferedImage concreteSprite = SpriteLoader.getPicture("concrete.png");
 	public static final BufferedImage spriteWater = SpriteLoader.getPicture("water.png");
-
-	private boolean isRondin;
+	protected boolean isRondin;
 
 	public Lane(Game game, int ord, boolean isRondin){
 		this(game, ord, new Random().nextInt(2) + 1, isRondin);
 	}
+	public Lane(Game game, int ord){ this(game, ord, new Random().nextInt(2) + 1, new Random().nextBoolean ()); }
 
 	public Lane(Game game, int ord, int speed, boolean isRondin){
 		this.game = game;
@@ -40,8 +40,8 @@ public class Lane {
 
 		// aléatoire
 		Random r = new Random();
-		this.speed = (isRondin ? 2 : 1);
-		this.leftToRight = ord%2==0;
+		this.speed = speed;
+		this.leftToRight = (isRondin ? ord%2==0 : r.nextBoolean());
 
 		this.density = r.nextDouble()%0.01+(isRondin ? 0.05 : 0.025);
 
@@ -73,6 +73,39 @@ public class Lane {
 
 			SpriteCase c = new SpriteCase(i, ord, sprite);
 			roadCases.add(c);
+			game.getGraphic().add(c, 0);
+		}
+	}
+
+	public Lane(Lane oldLane, int newOrd){
+		this.game = oldLane.game;
+		this.ord = oldLane.ord;
+		this.isRondin = oldLane.isRondin;
+		this.cars = oldLane.cars;
+		this.leftToRight = oldLane.leftToRight;
+		this.density = oldLane.density;
+		this.tic = oldLane.tic;
+
+		// Modifier ord des voitures
+		for (Car car : cars){
+			car.newOrd(newOrd);
+		}
+
+		// Changer position special cases
+		for (ICaseSpecial spec : oldLane.specialCases){
+			game.getGraphic().remove(spec, 3);
+
+			ICaseSpecial newSpec = spec.recreate(spec.getPosition().absc, newOrd);
+			this.specialCases.add(newSpec);
+			game.getGraphic().add(newSpec, 3);
+		}
+
+		ArrayList<SpriteCase> newRoadCases = new ArrayList<>();
+		for(SpriteCase spr : oldLane.roadCases){
+			game.getGraphic().remove(spr, 0);
+
+			SpriteCase c = new SpriteCase(spr.absc, newOrd, spr.getSprite());
+			this.roadCases.add(c);
 			game.getGraphic().add(c, 0);
 		}
 	}
@@ -147,7 +180,7 @@ public class Lane {
 	 * Ajoute une voiture au d�but de la voie avec probabilit� �gale � la
 	 * densit�, si la premi�re case de la voie est vide
 	 */
-	private void mayAddCar() {
+	protected void mayAddCar() {
 		boolean isFirstSafe = isSafe(getFirstCase());
 		boolean isBeforeSafe = isSafe(getBeforeFirstCase());
 
@@ -196,5 +229,39 @@ public class Lane {
 
 	public int getOrd(){
 		return ord;
+	}
+
+	public void addOrd(int i){
+		this.ord += i;
+
+		for (Car car : cars){
+			car.newOrd(this.ord);
+		}
+
+		ArrayList<ICaseSpecial> newCases = new ArrayList<>();
+
+		for (ICaseSpecial spec : this.specialCases){
+			game.getGraphic().remove(spec, 3);
+
+			ICaseSpecial newSpec = spec.recreate(spec.getPosition().absc, this.ord);
+			newCases.add(newSpec);
+			game.getGraphic().add(newSpec, 3);
+		}
+
+		ArrayList<SpriteCase> newRoadCases = new ArrayList<>();
+		for(SpriteCase spr : this.roadCases){
+			game.getGraphic().remove(spr, 0);
+
+			SpriteCase c = new SpriteCase(spr.absc, this.ord, spr.getSprite());
+			newRoadCases.add(c);
+			game.getGraphic().add(c, 0);
+		}
+
+		this.specialCases = newCases;
+		this.roadCases = newRoadCases;
+	}
+
+	public void subOrd(int i){
+		this.addOrd(-i);
 	}
 }

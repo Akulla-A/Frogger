@@ -1,8 +1,7 @@
 package gameCommons;
 
 import environment.EnvInf;
-
-import frog.FrogInf;
+import frog.Frog;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
 
@@ -25,9 +24,13 @@ public class MainInf {
         //Cr�ation de la partie
         GameInf game = new GameInf(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
         //Cr�ation et liaison de la grenouille
-        IFrog frog = new FrogInf(game);
-        game.setFrog(frog);
-        graphic.setFrog(frog, false);
+        IFrog frog1 = new Frog (game, false);
+        game.setFrog(frog1, false);
+        graphic.setFrog(frog1, false);
+
+        IFrog frog2 = new Frog(game, true);
+        game.setFrog(frog2, true);
+        graphic.setFrog(frog2, true);
         //Cr�ation et liaison de l'environnement
         EnvInf env = new EnvInf(game);
         game.setEnvironment(env);

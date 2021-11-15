@@ -11,21 +11,32 @@ import util.SpriteLoader;
 import java.awt.image.BufferedImage;
 
 public class Frog implements IFrog, Sprite {
-	private Game game;
-	private boolean alive = true;
-	private int aliveTicks = 0;
-	private Case pos;
-	private Direction dir;
-	private boolean gonnaDie = false;
-	private long startTime;
-	private boolean isSecond;
-	private long endTime;
+	protected Game game;
+	protected boolean alive = true;
+	protected int aliveTicks = 0;
+	protected Case pos;
+	protected Direction dir;
+	protected boolean gonnaDie = false;
+	protected long startTime;
+	protected boolean isSecond;
+	protected long endTime;
 
 	public Frog(Game game, boolean isSecond){
 		this.game = game;
 		this.pos = new Case(game.width/2, 0);
 		this.startTime = System.currentTimeMillis();
 		this.isSecond = isSecond;
+	}
+
+	public Frog(Game game, int x){
+		this(game, x, 0);
+	}
+
+	public Frog(Game game, int x, int y){
+		this.game = game;
+		this.pos = new Case(x, y);
+		this.startTime = System.currentTimeMillis();
+		this.isSecond = false;
 	}
 
 	public long getStartTime(){ return startTime; };
