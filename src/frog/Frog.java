@@ -8,9 +8,7 @@ import util.Direction;
 import util.Sprite;
 import util.SpriteLoader;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class Frog implements IFrog, Sprite {
 	private Game game;
@@ -19,8 +17,21 @@ public class Frog implements IFrog, Sprite {
 	private Case pos;
 	private Direction dir;
 	private boolean gonnaDie = false;
+	private long startTime;
+	private boolean isSecond;
+	private long endTime;
+
+	public Frog(Game game, boolean isSecond){
+		this.game = game;
+		this.pos = new Case(game.width/2, 0);
+		this.startTime = System.currentTimeMillis();
+		this.isSecond = isSecond;
+	}
+
+	public long getStartTime(){ return startTime; };
 
 	public static final BufferedImage sprite = SpriteLoader.getPicture("frog_bottom.png");
+	public static final BufferedImage sprite2 = SpriteLoader.getPicture("frog_bottom2.png");
 
 	public void setAlive(boolean state){
 		alive = state;
@@ -42,14 +53,9 @@ public class Frog implements IFrog, Sprite {
 		return aliveTicks;
 	}
 
-	public Frog(Game game){
-		this.game = game;
-		this.pos = new Case(game.width/2, 0);
-	}
-
 	@Override
 	public BufferedImage getSprite() {
-		return sprite;
+		return (isSecond ? sprite2 : sprite);
 	}
 
 	public Case getPosition(){
@@ -58,6 +64,14 @@ public class Frog implements IFrog, Sprite {
 
 	public Direction getDirection(){
 		return dir;
+	}
+
+	public void setAliveEnd(long time){
+		endTime = time;
+	};
+
+	public long getAliveEndTime(){
+		return endTime != 0 ? endTime : System.currentTimeMillis();
 	}
 
 	public void move(Direction key){

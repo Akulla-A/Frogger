@@ -1,6 +1,7 @@
 package graphicalElements;
 
 import gameCommons.IFrog;
+import panels.EndScreen;
 import util.Case;
 import util.Direction;
 import util.Sprite;
@@ -17,7 +18,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private int pixelByCase = 32;
 	private int width;
 	private int height;
-	private IFrog frog;
+	private IFrog frog1;
+	private IFrog frog2;
 	private JFrame frame;
 
 	public FroggerGraphic(int width, int height) {
@@ -71,16 +73,30 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-			frog.move(Direction.up);
+			frog1.move(Direction.up);
 			break;
 		case KeyEvent.VK_DOWN:
-			frog.move(Direction.down);
+			frog1.move(Direction.down);
 			break;
 		case KeyEvent.VK_LEFT:
-			frog.move(Direction.left);
+			frog1.move(Direction.left);
 			break;
 		case KeyEvent.VK_RIGHT:
-			frog.move(Direction.right);
+			frog1.move(Direction.right);
+		}
+
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_Z:
+				frog2.move(Direction.up);
+				break;
+			case KeyEvent.VK_S:
+				frog2.move(Direction.down);
+				break;
+			case KeyEvent.VK_Q:
+				frog2.move(Direction.left);
+				break;
+			case KeyEvent.VK_D:
+				frog2.move(Direction.right);
 		}
 	}
 
@@ -103,18 +119,29 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		this.spriteToDisplay.get(index).remove(e);
 	}
 
-	public void setFrog(IFrog frog) {
-		this.frog = frog;
+	public void setFrog(IFrog frog, boolean second) {
+		if(second){
+			this.frog2 = frog;
+		} else {
+			this.frog1 = frog;
+		}
 	}
 
-	public void endGameScreen(String s) {
+	public void endGameScreen(String s){
+		endGameScreen(s, null);
+	}
+
+	public void endGameScreen(String s, String s2) {
 		frame.remove(this);
+
+		frame.add(new EndScreen (frame, width, height, pixelByCase, s, s2));
 
 		// https://stackoverflow.com/questions/12477522/jframe-to-image-without-showing-the-jframe
 		//BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		//Graphics2D graphics = bi.createGraphics();
 		//graphics.drawImage(SpriteLoader.getPicture("background_end.png"), 0, 0, this);
 
+		/*
 		JLabel label = new JLabel(s);
 		label.setFont(new Font("Verdana", 1, 20));
 		label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -122,6 +149,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 		frame.getContentPane().add(label);
 
+		frame.repaint();
+		*/
 		frame.repaint();
 	}
 

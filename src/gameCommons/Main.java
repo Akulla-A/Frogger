@@ -51,9 +51,13 @@ public class Main {
 		//Cr�ation de la partie
 		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
 		//Cr�ation et liason de la grenouille
-		IFrog frog = new Frog(game);
-		game.setFrog(frog);
-		graphic.setFrog(frog);
+		IFrog frog1 = new Frog(game, false);
+		game.setFrog(frog1, false);
+		graphic.setFrog(frog1, false);
+
+		IFrog frog2 = new Frog(game, true);
+		game.setFrog(frog2, true);
+		graphic.setFrog(frog2, true);
 		//Cr�ation et liaison de l'environnement
 		IEnvironment env = new Environment(game);
 		game.setEnvironment(env);

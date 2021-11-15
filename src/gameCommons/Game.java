@@ -1,12 +1,8 @@
 package gameCommons;
 
 import frog.Frog;
-import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
-import util.SpriteLoader;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Game {
@@ -20,9 +16,9 @@ public class Game {
 
 	// Lien aux objets utilis�s
 	protected IEnvironment environment;
-	protected Frog frog;
+	protected Frog frog1;
+	protected Frog frog2;
 	protected IFroggerGraphics graphic;
-	protected long startTime;
 
 	/**
 	 * 
@@ -44,11 +40,10 @@ public class Game {
 		this.height = height;
 		this.minSpeedInTimerLoops = minSpeedInTimerLoop;
 		this.defaultDensity = defaultDensity;
-		this.startTime = System.currentTimeMillis();
 	}
 
-	public Frog getFrog(){
-		return this.frog;
+	public Frog getFrog(boolean second){
+		return (second ? this.frog2 : this.frog1);
 	}
 
 	/**
@@ -56,8 +51,12 @@ public class Game {
 	 * 
 	 * @param frog
 	 */
-	public void setFrog(IFrog frog) {
-		this.frog = (Frog)frog;
+	public void setFrog(IFrog frog, boolean second) {
+		if(second){
+			this.frog2 = (Frog)frog;
+		} else {
+			this.frog1 = (Frog)frog;
+		}
 	}
 
 	/**
@@ -83,9 +82,10 @@ public class Game {
 	 * 
 	 * @return true si le partie est perdue
 	 */
-	public boolean testLose() {
+	public boolean testLose(Frog frog) {
 		if(frog.isAlive() && (!this.environment.isSafe(frog.getPosition()) || frog.isGonnaDie())){
 			frog.setAlive(false);
+			frog.setAliveEnd(System.currentTimeMillis());
 			return true;
 		}
 		return false;
@@ -97,9 +97,10 @@ public class Game {
 	 * 
 	 * @return true si la partie est gagn�e
 	 */
-	public boolean testWin() {
-		if(frog.isAlive() && this.environment.isWinningPosition (this.frog.getPosition())){
+	public boolean testWin(Frog frog) {
+		if(frog.isAlive() && this.environment.isWinningPosition (frog.getPosition())){
 			frog.setAlive(false);
+			frog.setAliveEnd(System.currentTimeMillis());
 			return true;
 		} else {
 			return false;
@@ -115,13 +116,33 @@ public class Game {
 		environment.update();
 
 		//this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
-		this.graphic.add(frog, 4);
+		this.graphic.add(frog1, 4);
+		this.graphic.add(frog2, 4);
 
-		if(testWin()){
-			this.graphic.endGameScreen("Vous avez gagné : " + (System.currentTimeMillis()-this.startTime)/1000 + " sec");
-		} else if(testLose()){
-			System.out.println(System.currentTimeMillis() + " : " + this.startTime);
-			this.graphic.endGameScreen("Vous avez survécu : " + (System.currentTimeMillis()-this.startTime)/1000 + " sec");
+		testLose(frog1);
+		testWin(frog1);
+
+		if(frog2 != null){
+			testWin(frog2);
+			testLose(frog2);
+		}
+
+		boolean frog2Finish = (frog2 != null && frog2.isAlive ());
+		boolean frog1Finish = frog1.isAlive();
+
+		if (frog2Finish || frog1Finish){
+			return;
+		}
+
+		if(frog2 != null){
+			String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition (frog1.getPosition()) ? "gagné" : "perdu") +" en " + (frog1 .getAliveEndTime()-frog1.getStartTime())/1000 + " sec";
+			String txt2 = "Grenouille 2 à " + (this.environment.isWinningPosition (frog2.getPosition()) ? "gagné" : "perdu") +" en " + (frog2.getAliveEndTime()-frog2.getStartTime())/1000 + " sec";
+
+			this.graphic.endGameScreen(txt1, txt2);
+		} else {
+			String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition (frog1.getPosition()) ? "gagné" : "perdu") +" en " + (System.currentTimeMillis()-frog1.getStartTime())/1000 + " sec";
+
+			this.graphic.endGameScreen(txt1);
 		}
 	}
 

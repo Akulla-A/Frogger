@@ -27,7 +27,7 @@ public class MainInf {
         //Cr�ation et liaison de la grenouille
         IFrog frog = new FrogInf(game);
         game.setFrog(frog);
-        graphic.setFrog(frog);
+        graphic.setFrog(frog, false);
         //Cr�ation et liaison de l'environnement
         EnvInf env = new EnvInf(game);
         game.setEnvironment(env);

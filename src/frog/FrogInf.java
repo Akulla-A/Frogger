@@ -1,8 +1,6 @@
 package frog;
 
 import environment.ICaseSpecial;
-import environment.LaneInf;
-import gameCommons.Game;
 import gameCommons.GameInf;
 import gameCommons.IFrog;
 import util.Case;
@@ -96,4 +94,14 @@ public class FrogInf implements IFrog, Sprite {
 
     @Override
     public boolean isGonnaDie(){ return gonnaDie; }
+
+    @Override
+    public void setAliveEnd(long time) {
+
+    }
+
+    @Override
+    public long getAliveEndTime() {
+        return 0;
+    }
 }

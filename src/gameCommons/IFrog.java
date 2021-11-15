@@ -27,5 +27,8 @@ public interface IFrog {
 	void setGonnaDie(boolean b);
 	boolean isGonnaDie();
 
+	void setAliveEnd(long time);
+	long getAliveEndTime();
+
 	void addAliveTime();
 }

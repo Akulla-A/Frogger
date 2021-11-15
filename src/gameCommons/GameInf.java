@@ -1,13 +1,8 @@
 package gameCommons;
 
-import environment.EnvInf;
-import environment.Environment;
-import frog.Frog;
 import frog.FrogInf;
-import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
 
-import java.awt.*;
 import java.util.Random;
 
 public class GameInf {

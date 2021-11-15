@@ -78,25 +78,36 @@ public class Lane {
 	}
 
 	public void update() {
-		IFrog frog = this.game.getFrog();
-		Case pos = frog.getPosition();
+		IFrog frog1 = this.game.getFrog(false);
+		IFrog frog2 = this.game.getFrog(true);
+		Case pos1 = frog1.getPosition();
+		Case pos2 = frog2.getPosition();
+
 		++tic;
-		boolean alreadyMove = false;
+		boolean alreadyMoveFrog1 = false;
+		boolean alreadyMoveFrog2 = false;
+
 		boolean canSpawn = true;
 
 		for(int i = 0; i < cars.size(); i++){
 			boolean carTickMove = (speed != 0 && tic % speed == 0);
 			Car c = cars.get(i);
-			boolean inBounds = c.inBounds(pos);
+			boolean inBoundsFrog1 = c.inBounds(pos1);
+			boolean inBoundsFrog2 = c.inBounds(pos2);
 
 			if(c.update(carTickMove)){
 				cars.remove(c);
 				--i;
 			}
 
-			if(this.isRondin && inBounds && carTickMove && !alreadyMove){
-				alreadyMove = true;
-				frog.move(leftToRight ? Direction.right : Direction.left);
+			if(this.isRondin && inBoundsFrog1 && carTickMove && !alreadyMoveFrog1){
+				alreadyMoveFrog1 = true;
+				frog1.move(leftToRight ? Direction.right : Direction.left);
+			}
+
+			if(this.isRondin && inBoundsFrog2 && carTickMove && !alreadyMoveFrog2){
+				alreadyMoveFrog2 = true;
+				frog2.move(leftToRight ? Direction.right : Direction.left);
 			}
 		}
 

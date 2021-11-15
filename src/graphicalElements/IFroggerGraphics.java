@@ -1,7 +1,5 @@
 package graphicalElements;
 
-import environment.ICaseSpecial;
-import frog.Frog;
 import gameCommons.IFrog;
 import util.Sprite;
 
@@ -29,13 +27,14 @@ public interface IFroggerGraphics {
      * Lie la grenouille � l'environneemnt graphique
      * @param frog
      */
-    public void setFrog(IFrog frog);
+    public void setFrog(IFrog frog, boolean isSecond);
     
     /**
      * Lance un �cran de fin de partie
      * @param message le texte � afficher
      */
     public void endGameScreen(String message);
+    public void endGameScreen(String message, String message2);
 
     // ajoutés nous-mêmes
     public Graphics getGraphics();
