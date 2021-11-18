@@ -4,6 +4,7 @@ import frog.Frog;
 import gameCommons.Game;
 import gameCommons.GameInf;
 import gameCommons.IEnvironment;
+import gameCommons.IFrog;
 import util.Case;
 
 import java.util.ArrayList;
@@ -35,33 +36,40 @@ public class Environment implements IEnvironment {
 
     @Override
     public boolean changeLane(boolean down, Frog movingFrog){
-        Case p1 = game.getFrog(false).getPosition();
-        Case p2 = game.getFrog(true).getPosition();
-
-        boolean firstAlive = game.getFrog(false).isAlive();
-        boolean secondAlive = game.getFrog(true).isAlive();
-
+        IFrog frogFirst = game.getFrog(false);
+        IFrog frogSecond = game.getFrog(true);
+        Case p1 = frogFirst.getPosition();
+        boolean firstAlive = frogFirst.isAlive();
         int offset = (down ? 1 : -1);
 
-        if(secondAlive && (p2.ord <= 2 || p2.ord >= game.height - 2) && game.getFrog(true).equals(movingFrog)){
-            return false;
+        if(frogSecond != null){
+            Case p2 = frogSecond.getPosition();
+            boolean secondAlive = frogSecond.isAlive();
+
+            if(secondAlive && (p2.ord <= 2 || p2.ord >= game.height - 2) && frogSecond.equals(movingFrog)){
+                return false;
+            }
+
+            /*
+                islowerFrog et down = false. Alors le plus haut essaye de monter la route, on ignore
+                islowerFrog et down = true. Le plus bas essaye de descendre la route, on ignore
+                On veut ignorer ces 2 cas, on vérifie l'inverse
+            */
+            Frog twinFrog = game.getFrog(!movingFrog.isSecond());
+            boolean islowerFrog = movingFrog.getPosition().ord >= twinFrog.getPosition().ord;
+
+            if(twinFrog.isAlive() && (down != islowerFrog)){
+                return false;
+            }
+
+            if(!twinFrog.isAlive()){
+                twinFrog.setPosition(new Case(twinFrog.getPosition().absc, -10));
+            } else {
+                twinFrog.setPosition(new Case(twinFrog.getPosition().absc, twinFrog.getPosition().ord + offset));
+            }
         }
 
         if(firstAlive && (p1.ord <= 2 || p1.ord >= game.height - 2) && game.getFrog(false).equals(movingFrog)){
-            return false;
-        }
-
-        // On bouge seulement si c'est la frog la plus basse
-        Frog twinFrog = game.getFrog(!movingFrog.isSecond());
-        boolean islowerFrog = movingFrog.getPosition().ord >= twinFrog.getPosition().ord;
-
-        /*
-            islowerFrog et down = false. Alors le plus haut essaye de monter la route, on ignore
-            islowerFrog et down = true. Le plus bas essaye de descendre la route, on ignore
-            On veut ignorer ces 2 cas, on vérifie l'inverse
-        */
-
-        if(twinFrog.isAlive() && (down != islowerFrog)){
             return false;
         }
 
@@ -79,19 +87,12 @@ public class Environment implements IEnvironment {
             this.routes.add(new Lane(game, game.height));
         }
 
-        if(!twinFrog.isAlive()){
-            twinFrog.setPosition(new Case(twinFrog.getPosition().absc, -10));
-        } else {
-            twinFrog.setPosition(new Case(twinFrog.getPosition().absc, twinFrog.getPosition().ord + offset));
-        }
-
-        System.out.println(game.getFrog(false).getPosition().ord + " " + game.getFrog(true).getPosition().ord);
-
         return true;
     }
 
     @Override
     public boolean isSafe(Case c) {
+        /*
         for(Lane route : routes){
             if(!route.isSafe(c)){
                 return false;
@@ -99,6 +100,9 @@ public class Environment implements IEnvironment {
         }
 
         return !(0 > c.absc || 0 > c.ord || c.absc >= game.width || c.ord >= game.height);
+        */
+
+        return true;
     }
 
     @Override

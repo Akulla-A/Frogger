@@ -116,7 +116,10 @@ public class Game {
 		environment.update();
 
 		this.graphic.add(frog1, 4);
-		this.graphic.add(frog2, 4);
+
+		if(frog2 != null){
+			this.graphic.add(frog2, 4);
+		}
 
 		testLose(frog1);
 		testWin(frog1);

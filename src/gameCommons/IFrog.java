@@ -31,4 +31,5 @@ public interface IFrog {
 	long getAliveEndTime();
 
 	void addAliveTime();
+	boolean isAlive();
 }

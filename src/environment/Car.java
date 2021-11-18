@@ -69,7 +69,7 @@ public class Car {
 	//TODO : ajout de methodes
 	public boolean inBounds(Case p){
 		int absc = this.leftPosition.absc;
-		return ((this.leftPosition.ord == p.ord) && (absc <= p.absc && p.absc <= absc + length));
+		return ((this.leftPosition.ord == p.ord) && (absc <= p.absc && p.absc < absc + length));
 	}
 
 	public boolean update(boolean moving){

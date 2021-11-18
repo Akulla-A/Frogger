@@ -49,26 +49,32 @@ public class Main {
 		//Cr�ation de l'interface graphique
 		IFroggerGraphics graphic = new FroggerGraphic(width, height);
 		//Cr�ation de la partie
-		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
+		Game game;
+
+		if(args.length > 0 && args[0].equals("-infini")){
+			game = new GameInf(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
+		} else {
+			game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
+		}
 		//Cr�ation et liason de la grenouille
 		IFrog frog1 = new Frog(game, false);
 		game.setFrog(frog1, false);
 		graphic.setFrog(frog1, false);
 
-		IFrog frog2 = new Frog(game, true);
-		game.setFrog(frog2, true);
-		graphic.setFrog(frog2, true);
+		if((args.length > 1 && args[1].equals("-2players")) || args.length > 0 && args[0].equals("-2players")){
+			IFrog frog2 = new Frog(game, true);
+			game.setFrog(frog2, true);
+			graphic.setFrog(frog2, true);
+		}
+
 		//Cr�ation et liaison de l'environnement
 		IEnvironment env = new Environment(game);
 		game.setEnvironment(env);
 				
 		//Boucle principale : l'environnement s'acturalise tous les tempo milisecondes
-		Timer timer = new Timer(tempo, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				game.update();
-				graphic.repaint();
-			}
+		Timer timer = new Timer(tempo, e -> {
+			game.update();
+			graphic.repaint();
 		});
 		timer.setInitialDelay(0);
 		timer.start();
