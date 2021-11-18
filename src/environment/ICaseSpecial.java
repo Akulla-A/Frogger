@@ -16,6 +16,5 @@ public interface ICaseSpecial extends Sprite {
 
     boolean deleteOnUse();
 
-    // J'avais besoin d'avoir une fonction avec un type template pour recréer l'objet facilement dans laneInf
-    <T extends ICaseSpecial> T recreate(int absc, int ord);
+    ICaseSpecial recreate(int absc, int ord);
 }

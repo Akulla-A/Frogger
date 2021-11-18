@@ -13,24 +13,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Lane {
-	protected Game game;
-	protected int ord;
-	protected int speed;
-	protected ArrayList<Car> cars = new ArrayList<>();
-	protected boolean leftToRight;
-	protected double density;
-	protected int tic = 0;
-	protected ArrayList<ICaseSpecial> specialCases = new ArrayList<>();
-	protected ArrayList<SpriteCase> roadCases = new ArrayList<>();
-	public static final BufferedImage bottomSprite = SpriteLoader.getPicture("roadbottom.png");
-	public static final BufferedImage topSprite = SpriteLoader.getPicture("roadtop.png");
-	public static final BufferedImage concreteSprite = SpriteLoader.getPicture("concrete.png");
-	public static final BufferedImage spriteWater = SpriteLoader.getPicture("water.png");
-	protected boolean isRondin;
+	private Game game;
+	private int ord;
+	private int speed;
+	private ArrayList<Car> cars = new ArrayList<>();
+	private boolean leftToRight;
+	private double density;
+	private int tic = 0;
+	private ArrayList<ICaseSpecial> specialCases = new ArrayList<>();
+	private ArrayList<SpriteCase> roadCases = new ArrayList<>();
+	private static final BufferedImage bottomSprite = SpriteLoader.getPicture("roadbottom.png");
+	private static final BufferedImage topSprite = SpriteLoader.getPicture("roadtop.png");
+	private static final BufferedImage concreteSprite = SpriteLoader.getPicture("concrete.png");
+	private static final BufferedImage spriteWater = SpriteLoader.getPicture("water.png");
+	private boolean isRondin;
 
-	public Lane(Game game, int ord, boolean isRondin){
-		this(game, ord, new Random().nextInt(2) + 1, isRondin);
-	}
 	public Lane(Game game, int ord){ this(game, ord, new Random().nextInt(2) + 1, new Random().nextBoolean ()); }
 
 	public Lane(Game game, int ord, int speed, boolean isRondin){
@@ -77,54 +74,20 @@ public class Lane {
 		}
 	}
 
-	public Lane(Lane oldLane, int newOrd){
-		this.game = oldLane.game;
-		this.ord = oldLane.ord;
-		this.isRondin = oldLane.isRondin;
-		this.cars = oldLane.cars;
-		this.leftToRight = oldLane.leftToRight;
-		this.density = oldLane.density;
-		this.tic = oldLane.tic;
-
-		// Modifier ord des voitures
-		for (Car car : cars){
-			car.newOrd(newOrd);
-		}
-
-		// Changer position special cases
-		for (ICaseSpecial spec : oldLane.specialCases){
-			game.getGraphic().remove(spec, 3);
-
-			ICaseSpecial newSpec = spec.recreate(spec.getPosition().absc, newOrd);
-			this.specialCases.add(newSpec);
-			game.getGraphic().add(newSpec, 3);
-		}
-
-		ArrayList<SpriteCase> newRoadCases = new ArrayList<>();
-		for(SpriteCase spr : oldLane.roadCases){
-			game.getGraphic().remove(spr, 0);
-
-			SpriteCase c = new SpriteCase(spr.absc, newOrd, spr.getSprite());
-			this.roadCases.add(c);
-			game.getGraphic().add(c, 0);
-		}
-	}
-
 	public void update(boolean force) {
 		IFrog frog1 = this.game.getFrog(false);
 		IFrog frog2 = this.game.getFrog(true);
 		Case pos1 = frog1.getPosition();
 		Case pos2 = null;
+		Case secondPos = getSecondCase();
+		Case beforeFirstPos = getBeforeFirstCase();
+		int abscSpace = (leftToRight ? game.width : 0);
 
 		if(frog2 != null){
 			pos2 = frog2.getPosition();
 		}
 
 		++tic;
-		boolean alreadyMoveFrog1 = false;
-		boolean alreadyMoveFrog2 = false;
-
-		boolean canSpawn = true;
 
 		for(int i = 0; i < cars.size(); i++){
 			boolean carTickMove = (speed != 0 && tic % speed == 0 && !force);
@@ -138,23 +101,22 @@ public class Lane {
 				--i;
 			}
 
-			if(this.isRondin && inBoundsFrog1 && carTickMove && !alreadyMoveFrog1){
-				alreadyMoveFrog1 = true;
-				frog1.move(leftToRight ? Direction.right : Direction.left);
+			if((leftToRight && abscSpace < c.getCarPosition().absc) || abscSpace > c.getCarPosition().absc){
+				abscSpace = c.getCarPosition().absc;
 			}
 
-			if(this.isRondin && inBoundsFrog2 && carTickMove && !alreadyMoveFrog2){
-				alreadyMoveFrog2 = true;
-				frog2.move(leftToRight ? Direction.right : Direction.left);
+			if(this.isRondin && carTickMove){
+				if(inBoundsFrog1){
+					frog1.move(leftToRight ? Direction.right : Direction.left);
+				}
+
+				if(inBoundsFrog2){
+					frog2.move(leftToRight ? Direction.right : Direction.left);
+				}
 			}
 		}
 
-		mayAddCar();
-	}
-
-	// TODO : ajout de methodes
-	public ArrayList<Car> getCars(){
-		return cars;
+		mayAddCar(abscSpace);
 	}
 
 	public boolean isSafe(Case c){
@@ -167,6 +129,7 @@ public class Lane {
 		for(Car car : cars){
 			if(car.inBounds(c)){
 				onCar = true;
+				break;
 			}
 		}
 
@@ -185,35 +148,27 @@ public class Lane {
 	 * Ajoute une voiture au d�but de la voie avec probabilit� �gale � la
 	 * densit�, si la premi�re case de la voie est vide
 	 */
-	protected void mayAddCar() {
-		boolean isFirstSafe = isSafe(getFirstCase());
-		boolean isBeforeSafe = isSafe(getBeforeFirstCase());
+	private void mayAddCar(int freeSpace) {
+		// J'ai refais la fonction car celle de base ne vérifie pas les cases après la première
+		double rnd = game.randomGen.nextDouble();
+		int requiredSpace = (isRondin ? 5 : 3);
+		boolean enoughSpace = (leftToRight ? (requiredSpace < freeSpace) : (requiredSpace > freeSpace));
 
-		isFirstSafe = (isRondin != isFirstSafe);
-		isBeforeSafe = (isRondin != isBeforeSafe);
-		boolean isPreLengthSafe = (isRondin != isSafe(new Case(getFirstCase().absc + 5, getFirstCase().ord)));
-
-		if (speed != 0 && isFirstSafe && isBeforeSafe && (!isRondin || isPreLengthSafe)) {
-			double rnd = game.randomGen.nextDouble();
-
-			if (rnd < density) {
-				cars.add(new Car(game, getBeforeFirstCase(), leftToRight, isRondin));
-			}
+		if (speed != 0 && rnd < density && enoughSpace) {
+			cars.add(new Car(game, getBeforeFirstCase(), leftToRight, isRondin));
 		}
 	}
 
-	protected Case getFirstCase() {
-		if (leftToRight)
-			return new Case(0, ord);
-
-		return new Case(game.width - 1, ord);
+	public Case getFirstCase() {
+		return new Case(leftToRight ? 0 : game.width - 1, ord);
 	}
 
-	protected Case getBeforeFirstCase() {
-		if (leftToRight)
-			return new Case(-1, ord);
+	public Case getSecondCase() {
+		return new Case(leftToRight ? 1 : game.width - 2, ord);
+	}
 
-		return new Case(game.width, ord);
+	public Case getBeforeFirstCase() {
+		return new Case(leftToRight ? -1 : game.width, ord);
 	}
 
 	public ICaseSpecial getSpecialCases(Case frogCase){

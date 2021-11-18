@@ -19,6 +19,7 @@ public class Game {
 	protected Frog frog1;
 	protected Frog frog2;
 	protected IFroggerGraphics graphic;
+	private boolean isInfinite;
 
 	/**
 	 * 
@@ -33,13 +34,14 @@ public class Game {
 	 * @param defaultDensity
 	 *            densite de voiture utilisee par defaut pour les routes
 	 */
-	public Game(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity) {
+	public Game(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity, boolean isInfinite) {
 		super();
 		this.graphic = graphic;
 		this.width = width;
 		this.height = height;
 		this.minSpeedInTimerLoops = minSpeedInTimerLoop;
 		this.defaultDensity = defaultDensity;
+		this.isInfinite = isInfinite;
 	}
 
 	public Frog getFrog(boolean second){
@@ -98,7 +100,7 @@ public class Game {
 	 * @return true si la partie est gagn�e
 	 */
 	public boolean testWin(Frog frog) {
-		if(frog.isAlive() && this.environment.isWinningPosition (frog.getPosition())){
+		if(!isInfinite && frog.isAlive() && this.environment.isWinningPosition (frog.getPosition())){
 			frog.setAlive(false);
 			frog.setAliveEnd(System.currentTimeMillis());
 			return true;
@@ -132,20 +134,16 @@ public class Game {
 		boolean frog2Finish = (frog2 != null && frog2.isAlive ());
 		boolean frog1Finish = frog1.isAlive();
 
-		if (frog2Finish || frog1Finish){
+		if (frog2Finish || frog1Finish){ return; }
+
+		String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition (frog1.getPosition()) ? "gagné" : "perdu") +" en " + (System.currentTimeMillis()-frog1.getStartTime())/1000 + " sec";
+		if(frog2 != null){
+			String txt2 = "Grenouille 2 à " + (this.environment.isWinningPosition (frog2.getPosition()) ? "gagné" : "perdu") +" en " + (frog2.getAliveEndTime()-frog2.getStartTime())/1000 + " sec";
+			this.graphic.endGameScreen(txt1, txt2);
 			return;
 		}
 
-		if(frog2 != null){
-			String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition (frog1.getPosition()) ? "gagné" : "perdu") +" en " + (frog1 .getAliveEndTime()-frog1.getStartTime())/1000 + " sec";
-			String txt2 = "Grenouille 2 à " + (this.environment.isWinningPosition (frog2.getPosition()) ? "gagné" : "perdu") +" en " + (frog2.getAliveEndTime()-frog2.getStartTime())/1000 + " sec";
-
-			this.graphic.endGameScreen(txt1, txt2);
-		} else {
-			String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition (frog1.getPosition()) ? "gagné" : "perdu") +" en " + (System.currentTimeMillis()-frog1.getStartTime())/1000 + " sec";
-
-			this.graphic.endGameScreen(txt1);
-		}
+		this.graphic.endGameScreen(txt1);
 	}
 
 	public IEnvironment getEnvironment(){

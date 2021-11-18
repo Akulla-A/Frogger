@@ -1,8 +1,8 @@
 package frog;
 
+import environment.EnvInf;
 import environment.ICaseSpecial;
 import gameCommons.Game;
-import gameCommons.GameInf;
 import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
@@ -25,25 +25,10 @@ public class Frog implements IFrog, Sprite {
 	public Frog(Game game, boolean isSecond){
 		this.game = game;
 
-		if (game instanceof GameInf){
-			this.pos = new Case(game.width/2, 1);
-		} else {
-			this.pos = new Case(game.width/2, 0);
-		}
+		this.pos = new Case(game.width/2, 0);
 
 		this.startTime = System.currentTimeMillis();
 		this.isSecond = isSecond;
-	}
-
-	public Frog(Game game, int x){
-		this(game, x, 0);
-	}
-
-	public Frog(Game game, int x, int y){
-		this.game = game;
-		this.pos = new Case(x, y);
-		this.startTime = System.currentTimeMillis();
-		this.isSecond = false;
 	}
 
 	public long getStartTime(){ return startTime; }
@@ -103,18 +88,9 @@ public class Frog implements IFrog, Sprite {
 		switch(key){
 			case up:
 				c = new Case(pos.absc, pos.ord + 1);
-
-				// Le changement a déjà été géré ?
-				if ((game instanceof GameInf) && game.getEnvironment().changeLane(false, this))
-					return;
-
 				break;
 			case down:
 				c = new Case(pos.absc, pos.ord - 1);
-
-				if ((game instanceof GameInf) && game.getEnvironment().changeLane(true, this))
-					return;
-
 				break;
 			case left:
 				c = new Case(pos.absc - 1, pos.ord);

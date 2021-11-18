@@ -1,8 +1,10 @@
 package gameCommons;
 
+import environment.EnvInf;
 import environment.Environment;
 import environment.ICaseSpecial;
 import frog.Frog;
+import frog.FrogInf;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
 import specialCase.Bonus;
@@ -45,31 +47,30 @@ public class Main {
 		int tempo = 100;
 		int minSpeedInTimerLoops = 3;
 		double defaultDensity = 0.2;
+		boolean isInfinite = false;
+
+		if(args.length > 0 && args[0].equals("-infini")){
+			isInfinite = true;
+		}
 		
 		//Cr�ation de l'interface graphique
 		IFroggerGraphics graphic = new FroggerGraphic(width, height);
 		//Cr�ation de la partie
-		Game game;
+		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, false);
+		//Cr�ation et liaison de l'environnement
+		IEnvironment env = (isInfinite ? new EnvInf(game) : new Environment(game));
+		game.setEnvironment(env);
 
-		if(args.length > 0 && args[0].equals("-infini")){
-			game = new GameInf(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
-		} else {
-			game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity);
-		}
 		//Cr�ation et liason de la grenouille
-		IFrog frog1 = new Frog(game, false);
+		IFrog frog1 = (isInfinite ? new FrogInf(game, false) : new Frog(game, false));
 		game.setFrog(frog1, false);
 		graphic.setFrog(frog1, false);
 
 		if((args.length > 1 && args[1].equals("-2players")) || args.length > 0 && args[0].equals("-2players")){
-			IFrog frog2 = new Frog(game, true);
+			IFrog frog2 = (isInfinite ? new FrogInf(game, true) : new Frog(game, true));
 			game.setFrog(frog2, true);
 			graphic.setFrog(frog2, true);
 		}
-
-		//Cr�ation et liaison de l'environnement
-		IEnvironment env = new Environment(game);
-		game.setEnvironment(env);
 				
 		//Boucle principale : l'environnement s'acturalise tous les tempo milisecondes
 		Timer timer = new Timer(tempo, e -> {
