@@ -1,7 +1,6 @@
 package specialCase;
 
 import environment.ICaseSpecial;
-import frog.Frog;
 import gameCommons.IFrog;
 import graphicalElements.Element;
 import util.Case;

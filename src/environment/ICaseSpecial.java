@@ -1,6 +1,5 @@
 package environment;
 
-import frog.Frog;
 import gameCommons.IFrog;
 import util.Case;
 import util.Sprite;

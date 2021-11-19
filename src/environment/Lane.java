@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Lane {
-	private Game game;
+	private final Game game;
 	private int ord;
-	private int speed;
+	private final int speed;
 	private ArrayList<Car> cars = new ArrayList<>();
-	private boolean leftToRight;
-	private double density;
+	private final boolean leftToRight;
+	private final double density;
 	private int tic = 0;
 	private ArrayList<ICaseSpecial> specialCases = new ArrayList<>();
 	private ArrayList<SpriteCase> roadCases = new ArrayList<>();
@@ -26,7 +26,7 @@ public class Lane {
 	private static final BufferedImage topSprite = SpriteLoader.getPicture("roadtop.png");
 	private static final BufferedImage concreteSprite = SpriteLoader.getPicture("concrete.png");
 	private static final BufferedImage spriteWater = SpriteLoader.getPicture("water.png");
-	private boolean isRondin;
+	private final boolean isRondin;
 
 	public Lane(Game game, int ord){ this(game, ord, new Random().nextInt(2) + 1, new Random().nextBoolean ()); }
 

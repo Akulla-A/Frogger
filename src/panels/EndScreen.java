@@ -12,8 +12,6 @@ public class EndScreen extends JPanel implements KeyListener {
     private int pixelByCase = 32;
     private int width;
     private int height;
-    private IFrog frog;
-    private JFrame frame;
 
     public EndScreen(JFrame frame, int width, int height, int pixelByCase, String firstMessage, String secondMessage){
         this.pixelByCase = pixelByCase;

@@ -8,16 +8,5 @@ public class Case {
 		super();
 		this.absc = absc;
 		this.ord = ord;
-
-		/*
-		Random r = new Random();
-		float rand = r.nextFloat();
-
-		if(rand < 0.5){
-			type = CaseType.Normal;
-		} else {
-			type = CaseType.values()[r.nextInt(4)];
-		}
-		*/
 	}
 }

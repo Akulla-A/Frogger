@@ -19,7 +19,7 @@ public class Game {
 	protected Frog frog1;
 	protected Frog frog2;
 	protected IFroggerGraphics graphic;
-	private boolean isInfinite;
+	private final boolean isInfinite;
 
 	/**
 	 * 

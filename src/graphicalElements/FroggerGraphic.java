@@ -25,12 +25,12 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	public FroggerGraphic(int width, int height) {
 		this.width = width;
 		this.height = height;
-		elementsToDisplay = new ArrayList<Element>();
+		elementsToDisplay = new ArrayList<>();
 		spriteToDisplay = new ArrayList<>();
 
 		// initialise à 5. Le but est de pouvoir faire un ordre d'affichage ( Routes avant cases spéciales )
 		for(int i = 0; i < 5; i++){
-			spriteToDisplay.add(new ArrayList<Sprite>());
+			spriteToDisplay.add(new ArrayList<>());
 		}
 
 		setBackground(Color.GRAY);
@@ -72,31 +72,17 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_UP:
-			frog1.move(Direction.up);
-			break;
-		case KeyEvent.VK_DOWN:
-			frog1.move(Direction.down);
-			break;
-		case KeyEvent.VK_LEFT:
-			frog1.move(Direction.left);
-			break;
-		case KeyEvent.VK_RIGHT:
-			frog1.move(Direction.right);
+			case KeyEvent.VK_UP -> frog1.move(Direction.up);
+			case KeyEvent.VK_DOWN -> frog1.move(Direction.down);
+			case KeyEvent.VK_LEFT -> frog1.move(Direction.left);
+			case KeyEvent.VK_RIGHT -> frog1.move(Direction.right);
 		}
 
 		switch (e.getKeyCode()) {
-			case KeyEvent.VK_Z:
-				frog2.move(Direction.up);
-				break;
-			case KeyEvent.VK_S:
-				frog2.move(Direction.down);
-				break;
-			case KeyEvent.VK_Q:
-				frog2.move(Direction.left);
-				break;
-			case KeyEvent.VK_D:
-				frog2.move(Direction.right);
+			case KeyEvent.VK_Z -> frog2.move(Direction.up);
+			case KeyEvent.VK_S -> frog2.move(Direction.down);
+			case KeyEvent.VK_Q -> frog2.move(Direction.left);
+			case KeyEvent.VK_D -> frog2.move(Direction.right);
 		}
 	}
 
@@ -133,24 +119,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 	public void endGameScreen(String s, String s2) {
 		frame.remove(this);
-
 		frame.add(new EndScreen (frame, width, height, pixelByCase, s, s2));
-
-		// https://stackoverflow.com/questions/12477522/jframe-to-image-without-showing-the-jframe
-		//BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		//Graphics2D graphics = bi.createGraphics();
-		//graphics.drawImage(SpriteLoader.getPicture("background_end.png"), 0, 0, this);
-
-		/*
-		JLabel label = new JLabel(s);
-		label.setFont(new Font("Verdana", 1, 20));
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setSize(this.getSize());
-
-		frame.getContentPane().add(label);
-
-		frame.repaint();
-		*/
 		frame.repaint();
 	}
 

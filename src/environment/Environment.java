@@ -13,7 +13,7 @@ public class Environment implements IEnvironment {
     protected Game game;
 
     // Constructeur vide, pour éviter de créer les voitures, qu'on va créer dans EnvInf
-    public Environment(){};
+    public Environment(){}
 
     public Environment(Game game){
         this.game = game;

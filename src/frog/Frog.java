@@ -1,6 +1,5 @@
 package frog;
 
-import environment.EnvInf;
 import environment.ICaseSpecial;
 import gameCommons.Game;
 import gameCommons.IFrog;

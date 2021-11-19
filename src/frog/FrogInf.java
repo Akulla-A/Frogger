@@ -1,15 +1,11 @@
 package frog;
 
-import environment.EnvInf;
 import environment.ICaseSpecial;
 import gameCommons.Game;
 import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
 import util.Sprite;
-import util.SpriteLoader;
-
-import java.awt.image.BufferedImage;
 
 public class FrogInf extends Frog implements IFrog, Sprite {
 	public FrogInf(Game game, boolean isSecond){

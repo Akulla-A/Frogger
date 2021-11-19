@@ -13,8 +13,6 @@ import specialCase.Trap;
 import specialCase.Tunnel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class Main {
@@ -52,7 +50,7 @@ public class Main {
 		if(args.length > 0 && args[0].equals("-infini")){
 			isInfinite = true;
 		}
-		
+
 		//Cr�ation de l'interface graphique
 		IFroggerGraphics graphic = new FroggerGraphic(width, height);
 		//Cr�ation de la partie

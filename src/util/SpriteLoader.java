@@ -2,10 +2,7 @@ package util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SpriteLoader {
     static public BufferedImage getPicture(String spriteName) {
@@ -15,12 +12,8 @@ public class SpriteLoader {
             var pic = SpriteLoader.class.getResource("/resources/images/" + spriteName);
 
             try {
-                var img = ImageIO.read(pic);
-                return img;
-            } catch (IllegalArgumentException e){
-                System.out.println(e.getMessage());
-                return null;
-            } catch (java.io.IOException e){
+                return ImageIO.read(pic);
+            } catch (IllegalArgumentException | IOException e){
                 System.out.println(e.getMessage());
                 return null;
             }

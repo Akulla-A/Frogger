@@ -1,28 +1,23 @@
 package environment;
 
 import gameCommons.Game;
-import graphicalElements.Element;
 import util.Case;
 import util.SpriteCase;
 import util.SpriteLoader;
-
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Car {
-	private Game game;
+	private final Game game;
 	private Case leftPosition;
-	private boolean leftToRight;
-	private int length;
-	private final Color colorLtR = Color.BLACK;
-	private final Color colorRtL = Color.BLUE;
-	private boolean rondin;
+	private final boolean leftToRight;
+	private final int length;
+	private final boolean isRondin;
+
 	private ArrayList<SpriteCase> roadCases = new ArrayList<>();
 	public static final ArrayList<ArrayList<BufferedImage>> spriteCar = new ArrayList<>();
 	public static final BufferedImage spriteRondin = SpriteLoader.getPicture("rondin.png");
-	private boolean isRondin;
 
 	public Case getCarPosition(){
 		return leftPosition;
@@ -95,24 +90,7 @@ public class Car {
 				}
 			}
 		}
-
-		if(this.leftPosition.ord >= 0 && this.leftPosition.ord <= game.height){
-			addToGraphics();
-		}
-
 		return false;
-	}
-
-	/* Fourni : addToGraphics() permettant d'ajouter un element graphique correspondant a la voiture*/
-	private void addToGraphics() {
-		for (int i = 0; i < length; i++) {
-			Color color = colorRtL;
-			if (this.leftToRight){
-				color = colorLtR;
-			}
-			game.getGraphic()
-					.add(new Element(leftPosition.absc + i, leftPosition.ord, color));
-		}
 	}
 
 	public void removeSprites(boolean refresh){
