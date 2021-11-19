@@ -1,8 +1,8 @@
 package graphicalElements;
 
-import java.awt.*;
-
 import util.Case;
+
+import java.awt.*;
 
 
 public class Element extends Case {
@@ -12,10 +12,4 @@ public class Element extends Case {
         super(absc, ord);
         this.color = color;
     }
-    
-    public Element(Case c, Color color) {
-        super(c.absc, c.ord);
-        this.color = color;
-    }
-    
 }

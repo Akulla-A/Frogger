@@ -1,6 +1,5 @@
 package panels;
 
-import gameCommons.IFrog;
 import util.SpriteLoader;
 
 import javax.swing.*;
@@ -10,8 +9,8 @@ import java.awt.event.KeyListener;
 
 public class EndScreen extends JPanel implements KeyListener {
     private int pixelByCase = 32;
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     public EndScreen(JFrame frame, int width, int height, int pixelByCase, String firstMessage, String secondMessage){
         this.pixelByCase = pixelByCase;
@@ -26,7 +25,7 @@ public class EndScreen extends JPanel implements KeyListener {
         frame.addKeyListener(this);
 
         JLabel label = new JLabel(firstMessage);
-        label.setFont(new Font("Verdana", 1, 20));
+        label.setFont(new Font("Verdana", Font.BOLD, 20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setVerticalAlignment (SwingConstants.BOTTOM);
         label.setForeground (Color.WHITE);
@@ -34,7 +33,7 @@ public class EndScreen extends JPanel implements KeyListener {
 
         if(secondMessage != null){
             JLabel label2 = new JLabel(secondMessage);
-            label2.setFont(new Font("Verdana", 1, 20));
+            label2.setFont(new Font("Verdana", Font.BOLD, 20));
             label2.setHorizontalAlignment(SwingConstants.CENTER);
             label2.setForeground (Color.WHITE);
             label2.setVerticalAlignment (SwingConstants.TOP);

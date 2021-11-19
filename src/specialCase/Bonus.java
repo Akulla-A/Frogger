@@ -18,7 +18,7 @@ public class Bonus extends Element implements ICaseSpecial {
 
     @Override
     public void onFrogMove(IFrog frog) {
-        frog.addAliveTime();
+        frog.addScore();
     }
 
     @Override

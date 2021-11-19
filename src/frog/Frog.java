@@ -20,6 +20,7 @@ public class Frog implements IFrog, Sprite {
 	protected long startTime;
 	protected boolean isSecond;
 	protected long endTime;
+	protected int score;
 
 	public Frog(Game game, boolean isSecond){
 		this.game = game;
@@ -28,6 +29,7 @@ public class Frog implements IFrog, Sprite {
 
 		this.startTime = System.currentTimeMillis();
 		this.isSecond = isSecond;
+		this.score = 0;
 	}
 
 	public long getStartTime(){ return startTime; }
@@ -54,7 +56,16 @@ public class Frog implements IFrog, Sprite {
 	public int getAliveTime(){
 		return aliveTicks;
 	}
+
 	public boolean isSecond() { return isSecond; }
+
+	public void addScore(){
+		++score;
+	}
+
+	public int getScore(){
+		return score;
+	}
 
 	@Override
 	public BufferedImage getSprite() {

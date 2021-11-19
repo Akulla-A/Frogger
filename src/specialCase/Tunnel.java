@@ -19,7 +19,6 @@ public class Tunnel extends Element implements ICaseSpecial {
     @Override
     public void onFrogMove(IFrog frog) {
         Direction c;
-        Case pos = frog.getPosition();
 
         switch(frog.getDirection ()){
             case up:

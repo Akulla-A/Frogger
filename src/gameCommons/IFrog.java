@@ -32,4 +32,7 @@ public interface IFrog {
 
 	void addAliveTime();
 	boolean isAlive();
+
+	void addScore();
+	int getScore();
 }

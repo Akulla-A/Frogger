@@ -45,11 +45,7 @@ public class Main {
 		int tempo = 100;
 		int minSpeedInTimerLoops = 3;
 		double defaultDensity = 0.2;
-		boolean isInfinite = false;
-
-		if(args.length > 0 && args[0].equals("-infini")){
-			isInfinite = true;
-		}
+		boolean isInfinite = (args.length > 0 && args[0].equals("-infini"));
 
 		//Cr�ation de l'interface graphique
 		IFroggerGraphics graphic = new FroggerGraphic(width, height);

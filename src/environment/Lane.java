@@ -79,8 +79,6 @@ public class Lane {
 		IFrog frog2 = this.game.getFrog(true);
 		Case pos1 = frog1.getPosition();
 		Case pos2 = null;
-		Case secondPos = getSecondCase();
-		Case beforeFirstPos = getBeforeFirstCase();
 		int abscSpace = (leftToRight ? game.width : 0);
 
 		if(frog2 != null){
@@ -134,10 +132,6 @@ public class Lane {
 		}
 
 		return onCar == isRondin;
-	}
-
-	public boolean isRondin(){
-		return isRondin;
 	}
 
 	/*
@@ -219,9 +213,5 @@ public class Lane {
 
 		this.specialCases = newCases;
 		this.roadCases = newRoadCases;
-	}
-
-	public void subOrd(int i){
-		this.addOrd(-i);
 	}
 }
