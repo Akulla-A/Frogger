@@ -157,10 +157,6 @@ public class Lane {
 		return new Case(leftToRight ? 0 : game.width - 1, ord);
 	}
 
-	public Case getSecondCase() {
-		return new Case(leftToRight ? 1 : game.width - 2, ord);
-	}
-
 	public Case getBeforeFirstCase() {
 		return new Case(leftToRight ? -1 : game.width, ord);
 	}

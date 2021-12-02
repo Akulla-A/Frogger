@@ -121,6 +121,7 @@ public class Frog implements IFrog, Sprite {
 			if(specCase != null){
 				specCase.onFrogMove(this);
 			}
+
 		}
 	}
 }

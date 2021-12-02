@@ -50,7 +50,7 @@ public class Main {
 		//Cr�ation de l'interface graphique
 		IFroggerGraphics graphic = new FroggerGraphic(width, height);
 		//Cr�ation de la partie
-		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, false);
+		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, isInfinite);
 		//Cr�ation et liaison de l'environnement
 		IEnvironment env = (isInfinite ? new EnvInf(game) : new Environment(game));
 		game.setEnvironment(env);

@@ -139,6 +139,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame.repaint();
 	}
 
+
+
 	public Graphics getGraphics(){
 		return frame.getGraphics();
 	}

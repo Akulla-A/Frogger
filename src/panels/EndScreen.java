@@ -44,6 +44,8 @@ public class EndScreen extends JPanel implements KeyListener {
         frame.getContentPane().add(label);
     }
 
+
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(SpriteLoader.getPicture("background_end.png"), 0, 0, width*pixelByCase, height*pixelByCase, this);
