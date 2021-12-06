@@ -134,22 +134,20 @@ public class Game {
 		boolean frog2Finish = (frog2 != null && frog2.isAlive ());
 		boolean frog1Finish = frog1.isAlive();
 
-			if (frog2Finish || frog1Finish) {
-				return;
-			}
+		if (frog2Finish || frog1Finish) {
+			return;
+		}
 
-			String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition(frog1.getPosition()) ? "gagné" : "perdu") + " en " + (System.currentTimeMillis() - frog1.getStartTime()) / 1000 + " sec" + " et un score de " + frog1.getScore();
-			String txt = "Vous avez survécu pendant: " + (frog1.getAliveEndTime() - frog1.getStartTime()) / 1000 + " sec" + " et un score de " + frog1.getScore();
-		    String txt3 = "avec un score de : " + frog1.getScore() + " pièces";
-			if (frog2 != null) {
-				String txt2 = "Grenouille 2 à " + (this.environment.isWinningPosition(frog2.getPosition()) ? "gagné" : "perdu") + " en " + (frog2.getAliveEndTime() - frog2.getStartTime()) / 1000 + " sec" + " et un score de " + this.frog2.getScore();
-				this.graphic.endGameScreen(txt1, txt2);
-				return;
-			}
+		String txt1 = "Grenouille 1 à " + (this.environment.isWinningPosition(frog1.getPosition()) ? "gagné" : "perdu") + " en " + (frog1.getAliveEndTime() - frog1.getStartTime()) / 1000 + " sec" + " et un score de " + frog1.getScore();
+		String txt = "Vous avez survécu pendant: " + (frog1.getAliveEndTime() - frog1.getStartTime()) / 1000 + " sec" + " et un score de " + frog1.getScore();
 
+		if (frog2 != null) {
+			String txt2 = "Grenouille 2 à " + (this.environment.isWinningPosition(frog2.getPosition()) ? "gagné" : "perdu") + " en " + (frog2.getAliveEndTime() - frog2.getStartTime()) / 1000 + " sec" + " et un score de " + this.frog2.getScore();
+			this.graphic.endGameScreen(txt1, txt2);
+			return;
+		}
 
-			this.graphic.endGameScreen(isInfinite ? txt : txt1);
-
+		this.graphic.endGameScreen(isInfinite ? txt : txt1);
 	}
 
 	public IEnvironment getEnvironment(){
