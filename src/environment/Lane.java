@@ -99,7 +99,7 @@ public class Lane {
 				--i;
 			}
 
-			if((leftToRight && abscSpace < c.getCarPosition().absc) || abscSpace > c.getCarPosition().absc){
+			if((leftToRight && abscSpace > c.getCarPosition().absc) || abscSpace <= c.getCarPosition().absc){
 				abscSpace = c.getCarPosition().absc;
 			}
 
@@ -146,7 +146,7 @@ public class Lane {
 		// J'ai refais la fonction car celle de base ne vérifie pas les cases après la première
 		double rnd = game.randomGen.nextDouble();
 		int requiredSpace = (isRondin ? 5 : 3);
-		boolean enoughSpace = (leftToRight ? (requiredSpace < freeSpace) : (requiredSpace > freeSpace));
+		boolean enoughSpace = (leftToRight ? (requiredSpace < freeSpace) : (requiredSpace < (game.width - freeSpace)));
 
 		if (speed != 0 && rnd < density && enoughSpace) {
 			cars.add(new Car(game, getBeforeFirstCase(), leftToRight, isRondin));
