@@ -25,15 +25,27 @@ public class FrogInf extends Frog implements IFrog, Sprite {
 				c = new Case(pos.absc, pos.ord + 1);
 
 				// Le changement a déjà été géré ?
-				if (game.getEnvironment().changeLane(false, this))
+				if (game.getEnvironment().changeLane(false, this)){
+					ICaseSpecial specCase = game.getEnvironment().getSpecialFrogCase(pos);
+
+					if(specCase != null){
+						specCase.onFrogMove(this);
+					}
 					return;
+				}
 
 				break;
 			case down:
 				c = new Case(pos.absc, pos.ord - 1);
 
-				if (game.getEnvironment().changeLane(true, this))
+				if (game.getEnvironment().changeLane(true, this)){
+					ICaseSpecial specCase = game.getEnvironment().getSpecialFrogCase(pos);
+
+					if(specCase != null){
+						specCase.onFrogMove(this);
+					}
 					return;
+				}
 
 				break;
 			case left:
