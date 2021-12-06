@@ -93,7 +93,7 @@ public class Environment implements IEnvironment {
     @Override
     public void update() {
         for(Lane route : routes){
-            route.update(false);
+            route.update();
         }
     }
 
